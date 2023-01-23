@@ -1,0 +1,16 @@
+<resources>
+    <string name="app_name">Soft 1C</string>
+    <string name="text_adress">address</string>
+    <string name="text_port">port</string>
+    <string name="text_basename">basename</string>
+    <string name="text_username">username</string>
+    <string name="text_password">password</string>
+    <string name="text_log_in">Log in</string>
+    <string name="text_title_auth">Authorization</string>
+    <string name="text_field_is_empyt">Field required</string>
+
+    <array name="protocols">
+        <item>http</item>
+        <item>https</item>
+    </array>
+</resources>
