@@ -9,4 +9,9 @@
     <string name="text_log_in">Войти</string>
     <string name="text_title_auth">Авторизация</string>
     <string name="text_field_is_empyt">Поле не заполнено</string>
+    <string name="text_title_test">Тест</string>
+    <string name="text_for_search">Введите для поиска</string>
+    <string name="text_title_search">Поиск</string>
+    <string name="text_submit">Подтвердить</string>
+    <string name="text_submitted">Подтверждено</string>
 </resources>

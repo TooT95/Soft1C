@@ -44,7 +44,7 @@ object Network {
 
     private val retrofit = Retrofit.Builder()
         .addConverterFactory(MoshiConverterFactory.create())
-        .client(getUnsafeOkHttpClient().build())
+        .client(client)
         .baseUrl(Utils.base_url + Utils.auth)
         .build()
 
@@ -54,4 +54,6 @@ object Network {
     const val KEY_USERNAME = "key_username"
     const val KEY_PASSWORD = "key_password"
     const val KEY_BASE_URL = "key_base_url"
+    const val KEY_ADDRESS = "key_address"
+    const val KEY_PORT = "key_port"
 }

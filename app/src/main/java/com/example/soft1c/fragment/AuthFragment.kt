@@ -1,9 +1,11 @@
 package com.example.soft1c.fragment
 
+import okhttp3.Credentials
 import android.os.Bundle
 import android.view.View
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.soft1c.Demo
 import com.example.soft1c.R
 import com.example.soft1c.Utils
@@ -11,6 +13,7 @@ import com.example.soft1c.databinding.FragmentAuthBinding
 import com.example.soft1c.network.Network
 import com.example.soft1c.viewmodel.BaseViewModel
 import com.google.android.material.textfield.TextInputEditText
+import kotlin.text.Charsets.UTF_8
 
 class AuthFragment : BaseFragment<FragmentAuthBinding>(FragmentAuthBinding::inflate) {
 
@@ -29,7 +32,7 @@ class AuthFragment : BaseFragment<FragmentAuthBinding>(FragmentAuthBinding::infl
         viewModel.authLiveData.observe(viewLifecycleOwner) {
             showPbLoading(false)
             if (it) {
-                toast("Result OK")
+                findNavController().navigate(R.id.action_authFragment_to_testFragment)
             }
         }
         viewModel.toastLiveData.observe(viewLifecycleOwner) {
@@ -46,18 +49,22 @@ class AuthFragment : BaseFragment<FragmentAuthBinding>(FragmentAuthBinding::infl
                 setBase()
                 val demo = Demo()
                 demo.loadProfile()
-//                viewModel.auth()
-//                showPbLoading(true)
+                viewModel.auth()
+                showPbLoading(true)
             }
         }
     }
 
     private fun loadFromSharedPref() {
-        with(binding){
+        with(binding) {
+            val address = getSharedPref(Network.KEY_ADDRESS)
+            val port = getSharedPref(Network.KEY_PORT)
             val url = getSharedPref(Network.KEY_BASE_URL)
             val baseName = getSharedPref(Network.KEY_BASENAME)
             val username = getSharedPref(Network.KEY_USERNAME)
             val password = getSharedPref(Network.KEY_PASSWORD)
+            etxtUrlAdress.setText(address)
+            etxtUrlPort.setText(port)
             etxtBasename.setText(baseName)
             etxtUsername.setText(username)
             etxtPassword.setText(password)
@@ -68,8 +75,10 @@ class AuthFragment : BaseFragment<FragmentAuthBinding>(FragmentAuthBinding::infl
     private fun setBase() {
         with(binding) {
             val address = checkFieldReturn(etxtUrlAdress)
+            setSharedPref(Network.KEY_ADDRESS, address)
             if (address.isEmpty()) return
             var port = etxtUrlPort.text.toString()
+            setSharedPref(Network.KEY_PORT, port)
             if (port.isEmpty()) port = "" else port = ":${port}"
             val url = "${spinnerProtocols.selectedItem}://${address}${port}"
 
