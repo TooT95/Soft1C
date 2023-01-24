@@ -9,4 +9,7 @@ interface BaseApi {
     @GET("authorization") //authorization
     fun auth(): Call<ResponseBody>
 
+    @GET("Priemki") //authorization
+    fun acceptanceList(): Call<ResponseBody>
+
 }

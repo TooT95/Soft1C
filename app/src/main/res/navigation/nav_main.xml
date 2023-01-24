@@ -10,9 +10,10 @@
         android:name="com.example.soft1c.fragment.AuthFragment"
         android:label="AuthFragment"
         tools:layout="@layout/fragment_auth">
+
         <action
-            android:id="@+id/action_authFragment_to_testFragment"
-            app:destination="@id/testFragment"
+            android:id="@+id/action_authFragment_to_acceptanceFragment"
+            app:destination="@id/acceptanceFragment"
             app:popUpTo="@id/authFragment"
             app:popUpToInclusive="true" />
     </fragment>
@@ -21,7 +22,7 @@
         android:id="@+id/testFragment"
         android:name="com.example.soft1c.fragment.TestFragment"
         android:label="TestFragment"
-        tools:layout="@layout/fragment_test" >
+        tools:layout="@layout/fragment_test">
         <action
             android:id="@+id/action_testFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
@@ -31,4 +32,9 @@
         android:name="com.example.soft1c.fragment.SearchFragment"
         android:label="SearchFragment"
         tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/acceptanceFragment"
+        android:name="com.example.soft1c.fragment.AcceptanceFragment"
+        android:label="AcceptanceFragment"
+        tools:layout="@layout/fragment_acceptance" />
 </navigation>

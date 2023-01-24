@@ -32,7 +32,7 @@ class AuthFragment : BaseFragment<FragmentAuthBinding>(FragmentAuthBinding::infl
         viewModel.authLiveData.observe(viewLifecycleOwner) {
             showPbLoading(false)
             if (it) {
-                findNavController().navigate(R.id.action_authFragment_to_testFragment)
+                findNavController().navigate(R.id.action_authFragment_to_acceptanceFragment)
             }
         }
         viewModel.toastLiveData.observe(viewLifecycleOwner) {

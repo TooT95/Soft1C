@@ -7,12 +7,18 @@
     <string name="text_password">password</string>
     <string name="text_log_in">Log in</string>
     <string name="text_title_auth">Authorization</string>
+    <string name="text_title_acceptance">Acceptance of goods</string>
     <string name="text_title_test">Test</string>
     <string name="text_title_search">Search</string>
     <string name="text_field_is_empyt">Field required</string>
     <string name="text_for_search">Enter for search</string>
     <string name="text_submit">Submit</string>
     <string name="text_submitted">Submitted</string>
+    <string name="text_acceptance">Acceptance</string>
+    <string name="text_weight">Weight</string>
+    <string name="text_size">Size</string>
+    <string name="text_document_number">Document number</string>
+    <string name="text_empty" />
 
     <array name="protocols">
         <item>http</item>

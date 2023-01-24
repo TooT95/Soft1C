@@ -14,4 +14,9 @@
     <string name="text_title_search">Поиск</string>
     <string name="text_submit">Подтвердить</string>
     <string name="text_submitted">Подтверждено</string>
+    <string name="text_acceptance">Прием</string>
+    <string name="text_weight">Вес</string>
+    <string name="text_size">Размер</string>
+    <string name="text_document_number">Номер документа</string>
+    <string name="text_title_acceptance">Прием товаров</string>
 </resources>

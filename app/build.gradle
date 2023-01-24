@@ -9,7 +9,7 @@ android {
 
     defaultConfig {
         applicationId "com.example.soft1c"
-        minSdk 21
+        minSdk 24
         targetSdk 32
         versionCode 1
         versionName "1.0"
@@ -73,4 +73,6 @@ dependencies {
     // Glide implementation
     implementation 'com.github.bumptech.glide:glide:4.13.2'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.13.2'
+
+    implementation 'com.journeyapps:zxing-android-embedded:4.1.0'
 }

@@ -21,6 +21,12 @@
         <item name="android:textStyle">bold</item>
     </style>
 
+    <style name="TextNumber" parent="TextAppearance.MaterialComponents.Headline5">
+        <item name="android:textSize">@dimen/text_size_18</item>
+        <item name="android:textColor">@color/black</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
     <style name="TextInputDefault" parent="">
         <item name="android:backgroundTint">@color/white</item>
     </style>

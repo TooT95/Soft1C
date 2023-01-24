@@ -3,4 +3,9 @@
     <dimen name="default_margin">8dp</dimen>
     <dimen name="default_card_corner">25dp</dimen>
     <dimen name="text_size_log_in">18sp</dimen>
+    <dimen name="text_size_18">18sp</dimen>
+    <dimen name="default_number_size">100dp</dimen>
+    <dimen name="default_client_size">120dp</dimen>
+    <dimen name="default_number_package">80dp</dimen>
+    <dimen name="default_chb_width">30dp</dimen>
 </resources>

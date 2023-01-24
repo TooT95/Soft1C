@@ -1,11 +1,11 @@
 package com.example.soft1c.fragment
 
 import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import androidx.fragment.app.setFragmentResultListener
-import androidx.lifecycle.Observer
+import com.google.zxing.integration.android.IntentIntegrator
 import androidx.navigation.fragment.findNavController
 import com.example.soft1c.R
 import com.example.soft1c.databinding.FragmentTestBinding

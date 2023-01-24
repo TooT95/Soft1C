@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/default_margin">
+
+    <TextView
+        android:id="@+id/txt_document_number"
+        style="@style/TextNumber"
+        android:layout_width="@dimen/default_number_size"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@tools:sample/last_names" />
+
+    <TextView
+        android:id="@+id/txt_client"
+        style="@style/TextNumber"
+        android:layout_width="@dimen/default_client_size"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/txt_document_number"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@tools:sample/last_names" />
+
+    <TextView
+        android:id="@+id/txt_package"
+        style="@style/TextNumber"
+        android:layout_width="@dimen/default_number_package"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/default_margin"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toEndOf="@id/txt_client"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="@tools:sample/last_names" />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_marginStart="@dimen/default_margin"
+        android:gravity="center_vertical"
+        android:orientation="vertical"
+        app:layout_constraintStart_toEndOf="@id/txt_package"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/txt_empty_weight"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/default_chb_width"
+            android:text="@string/text_empty" />
+
+        <ImageView
+            android:id="@+id/iv_weight"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/default_chb_width"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_checked"
+            android:visibility="gone" />
+
+        <TextView
+            android:id="@+id/txt_empty_capacity"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/default_chb_width"
+            android:text="@string/text_empty" />
+
+        <ImageView
+            android:id="@+id/iv_capacity"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/default_chb_width"
+            android:contentDescription="@string/app_name"
+            android:src="@drawable/ic_checked"
+            android:visibility="gone" />
+
+
+    </LinearLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
