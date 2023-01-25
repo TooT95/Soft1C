@@ -13,7 +13,7 @@
 
         <action
             android:id="@+id/action_authFragment_to_acceptanceFragment"
-            app:destination="@id/acceptanceFragment"
+            app:destination="@id/acceptanceListFragment"
             app:popUpTo="@id/authFragment"
             app:popUpToInclusive="true" />
     </fragment>
@@ -32,6 +32,16 @@
         android:name="com.example.soft1c.fragment.SearchFragment"
         android:label="SearchFragment"
         tools:layout="@layout/fragment_search" />
+    <fragment
+        android:id="@+id/acceptanceListFragment"
+        android:name="com.example.soft1c.fragment.AcceptanceListFragment"
+        android:label="AcceptanceFragment"
+        tools:layout="@layout/fragment_acceptance_list">
+        <action
+            android:id="@+id/action_acceptanceFragment_to_acceptanceFragment"
+            app:destination="@id/acceptanceFragment" />
+    </fragment>
+
     <fragment
         android:id="@+id/acceptanceFragment"
         android:name="com.example.soft1c.fragment.AcceptanceFragment"

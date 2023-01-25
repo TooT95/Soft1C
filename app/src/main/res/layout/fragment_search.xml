@@ -5,7 +5,6 @@
     android:layout_margin="@dimen/default_margin"
     android:orientation="vertical">
 
-    <!--Search view for filtering list view-->
     <SearchView
         android:id="@+id/sv_text"
         android:layout_width="match_parent"

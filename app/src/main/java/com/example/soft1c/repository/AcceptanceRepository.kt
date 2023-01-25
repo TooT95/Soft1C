@@ -50,20 +50,23 @@ class AcceptanceRepository() {
     }
 
     private fun getaAcceptanceFromJsonObject(acceptJson: JSONObject): Acceptance {
-        val ref = acceptJson.getString(REF_KEY)
+//        val ref = acceptJson.getString(REF_KEY)
         val number = acceptJson.getString(NUMBER_KEY)
         val client = acceptJson.getString(CLIENT_KEY)
         val packageName = acceptJson.getString(PACKAGE_NAME_KEY)
-        val productTypeName = acceptJson.getString(PRODUCT_TYPE_NAME_KEY)
-        val zoneName = acceptJson.getString(ZONE_NAME_KEY)
-        val date = acceptJson.getString(DATE_KEY)
+//        val productTypeName = acceptJson.getString(PRODUCT_TYPE_NAME_KEY)
+//        val zoneName = acceptJson.getString(ZONE_NAME_KEY)
+//        val date = acceptJson.getString(DATE_KEY)
         val weight = acceptJson.getBoolean(WEIGHT_KEY)
         val capacity = acceptJson.getBoolean(CAPACITY_KEY)
-        val zone = acceptJson.getString(ZONE_KEY)
-        val packageUid = acceptJson.getString(PACKAGE_KEY)
-        val productType = acceptJson.getString(PRODUCT_TYPE_KEY)
-        return Acceptance(ref, number, client, date, weight, capacity,
-            zoneName, productTypeName, packageName, packageUid, zone, productType)
+//        val zone = acceptJson.getString(ZONE_KEY)
+//        val packageUid = acceptJson.getString(PACKAGE_KEY)
+//        val productType = acceptJson.getString(PRODUCT_TYPE_KEY)
+        return Acceptance(number = number,
+            client = client,
+            _package = packageName,
+            weight = weight,
+            capacity = capacity)
     }
 
     companion object {

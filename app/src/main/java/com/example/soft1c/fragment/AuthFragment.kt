@@ -21,9 +21,7 @@ class AuthFragment : BaseFragment<FragmentAuthBinding>(FragmentAuthBinding::infl
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.let {
-            it.title = resources.getString(R.string.text_title_auth)
-        }
+        binding.includeToolbar.toolbar.title = resources.getString(R.string.text_title_auth)
         initUI()
         obserViewModels()
     }

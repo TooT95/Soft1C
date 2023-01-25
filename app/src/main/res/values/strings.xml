@@ -7,7 +7,8 @@
     <string name="text_password">password</string>
     <string name="text_log_in">Log in</string>
     <string name="text_title_auth">Authorization</string>
-    <string name="text_title_acceptance">Acceptance of goods</string>
+    <string name="text_title_acceptance_list">Acceptance of goods</string>
+    <string name="text_title_acceptance">Acceptance of good</string>
     <string name="text_title_test">Test</string>
     <string name="text_title_search">Search</string>
     <string name="text_field_is_empyt">Field required</string>
@@ -19,6 +20,28 @@
     <string name="text_size">Size</string>
     <string name="text_document_number">Document number</string>
     <string name="text_empty" />
+    <string name="text_code_client">Code client</string>
+    <string name="text_number_of_seats">Number of seats</string>
+    <string name="text_id_card_number">Id card number</string>
+    <string name="text_passport">Passport</string>
+    <string name="text_zone">Zone</string>
+    <string name="text_number_of_auto">Number of auto</string>
+    <string name="text_number">Number</string>
+    <string name="text_exclamation">!!!</string>
+    <string name="text_currency">$$</string>
+    <string name="text_arrow">↑↑</string>
+    <string name="text_brand">Brand</string>
+    <string name="text_z">Z</string>
+    <string name="text_store_address">Store address</string>
+    <string name="text_store_number">Store number</string>
+    <string name="text_representative">Representative</string>
+    <string name="text_store_phone">Store phone number</string>
+    <string name="text_product_type">Product type</string>
+    <string name="text_package">Package</string>
+    <string name="text_package_count">Package count</string>
+    <string name="text_count_in_package">Count in package</string>
+    <string name="text_save">Save</string>
+    <string name="text_close">Close</string>
 
     <array name="protocols">
         <item>http</item>
