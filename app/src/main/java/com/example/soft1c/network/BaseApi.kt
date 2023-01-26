@@ -7,13 +7,24 @@ import retrofit2.http.Query
 
 interface BaseApi {
 
-    @GET("authorization") //authorization
+    @GET("authorization")
     fun auth(): Call<ResponseBody>
 
-    @GET("Priemki") //authorization
+    @GET("Priemki")
     fun acceptanceList(): Call<ResponseBody>
 
-    @GET("DanniePriemki") //authorization
+    @GET("DanniePriemki")
     fun acceptance(@Query("Nomer") number:String): Call<ResponseBody>
 
+    @GET("Addressa")
+    fun addressList(): Call<ResponseBody>
+
+    @GET("Zoni")
+    fun zoneList(): Call<ResponseBody>
+
+    @GET("TipiUpakovki")
+    fun packageList(): Call<ResponseBody>
+
+    @GET("VidiTovarov")
+    fun productTypeList(): Call<ResponseBody>
 }

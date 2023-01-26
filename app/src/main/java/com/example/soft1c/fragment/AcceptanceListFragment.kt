@@ -10,11 +10,15 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soft1c.R
+import com.example.soft1c.Utils
 import com.example.soft1c.adapter.AcceptanceAdapter
 import com.example.soft1c.databinding.FragmentAcceptanceListBinding
 import com.example.soft1c.model.Acceptance
+import com.example.soft1c.model.AnyModel
 import com.example.soft1c.model.ItemClicked
+import com.example.soft1c.repository.BaseRepository
 import com.example.soft1c.viewmodel.AcceptanceViewModel
+import com.example.soft1c.viewmodel.BaseViewModel
 import com.google.android.material.textfield.TextInputEditText
 import timber.log.Timber
 
@@ -23,10 +27,13 @@ class AcceptanceListFragment :
 
     private lateinit var acceptanceAdapter: AcceptanceAdapter
     private val viewModel: AcceptanceViewModel by viewModels()
+    private val baseViewModel: BaseViewModel by viewModels()
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.getAcceptanceList()
+        baseViewModel.downloadType(Utils.ObjectModelType.ADDRESS)
     }
 
 
@@ -51,6 +58,7 @@ class AcceptanceListFragment :
             else
                 toast("Element not found")
         }
+        baseViewModel.anyObjectLiveData.observe(viewLifecycleOwner, ::checkModelAndDownload)
     }
 
     private fun initUI() {
@@ -87,23 +95,31 @@ class AcceptanceListFragment :
             ivAdd.setOnClickListener {
                 openAcceptanceDetail(Bundle())
             }
-            etxtDocumentNumber.setOnKeyListener { eView, key, event ->
-                if (key == 66 && event.action == KeyEvent.ACTION_UP) {
-                    Timber.d("etxtDocumentNumber.setOnKeyListener $key")
-                    val thisView = (eView as TextInputEditText)
-                    if (thisView.text!!.isEmpty()) {
-                        thisView.error = resources.getString(R.string.text_field_is_empyt)
-                        thisView.requestFocus()
-                        return@setOnKeyListener false
-                    }
-                    thisView.error = null
-                    showDialogLoading()
-                    viewModel.getAcceptance(thisView.text.toString())
-                    return@setOnKeyListener true
-                }
-                return@setOnKeyListener false
-            }
+            etxtDocumentNumber.setOnKeyListener(::findOpenDocumentByNumber)
         }
+    }
+
+    private fun findOpenDocumentByNumber(eView: View, key: Int, event: KeyEvent): Boolean {
+        if (key == 66 && event.action == KeyEvent.ACTION_UP) {
+            val thisView = (eView as TextInputEditText)
+            if (thisView.text!!.isEmpty()) {
+                thisView.error = resources.getString(R.string.text_field_is_empyt)
+                thisView.requestFocus()
+                return false
+            }
+            thisView.error = null
+            showDialogLoading()
+            viewModel.getAcceptance(thisView.text.toString())
+            return true
+        }
+        return false
+    }
+
+
+    private fun checkModelAndDownload(pairOf: Pair<Int, List<AnyModel>>) {
+        val type = pairOf.first
+        val listOfData = pairOf.second
+        toast(type.toString())
     }
 
     private fun onItemClicked(itemClicked: ItemClicked, acceptance: Acceptance) {

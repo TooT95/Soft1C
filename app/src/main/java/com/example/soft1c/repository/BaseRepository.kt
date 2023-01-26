@@ -1,8 +1,10 @@
 package com.example.soft1c.repository
 
-import com.example.soft1c.network.BaseApi
+import com.example.soft1c.Utils
+import com.example.soft1c.model.*
 import com.example.soft1c.network.Network
 import okhttp3.ResponseBody
+import org.json.JSONArray
 import org.json.JSONObject
 import kotlin.coroutines.suspendCoroutine
 import retrofit2.Call
@@ -23,8 +25,6 @@ class BaseRepository() {
                         response: Response<ResponseBody>,
                     ) {
                         if (response.isSuccessful) {
-//                            val responseBody = response.body()?.string() ?: ""
-//                            Timber.d("responseBody $responseBody")
                             continuation.resume(true)
                             return
                         }
@@ -40,4 +40,48 @@ class BaseRepository() {
         }
     }
 
+    suspend fun getAnyApi(type: Int): Pair<Int, List<AnyModel>> {
+        return suspendCoroutine { continuation ->
+            Network.api.addressList().enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>,
+                ) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()?.string() ?: ""
+                        continuation.resume(Pair(type, getAddressListJson(responseBody, type)))
+                    } else {
+                        continuation.resume(Pair(Utils.ObjectModelType.EMPTY, emptyList()))
+                    }
+
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    continuation.resumeWithException(t)
+                }
+
+            })
+
+        }
+    }
+
+    private fun getAddressListJson(responseBody: String, type: Int): List<AnyModel> {
+        val addressList = mutableListOf<AnyModel>()
+        val arrayJson = JSONArray(responseBody)
+        for (item in 0 until arrayJson.length()) {
+            val objectJson = arrayJson.getJSONObject(item)
+            val ref = objectJson.getString(Utils.Contracts.REF_KEY)
+            val name = objectJson.getString(Utils.Contracts.REF_KEY)
+            val code = objectJson.getString(Utils.Contracts.REF_KEY)
+            val anyObject = when (type) {
+                Utils.ObjectModelType.ADDRESS -> AnyModel.AddressModel(ref, name, code)
+                Utils.ObjectModelType._PACKAGE -> AnyModel.PackageModel(ref, name, code)
+                Utils.ObjectModelType.PRODUCT_TYPE -> AnyModel.ProductType(ref, name, code)
+                Utils.ObjectModelType.ZONE -> AnyModel.Zone(ref, name, code)
+                else -> AnyModel.AddressModel(ref, name, code)
+            }
+            addressList.add(anyObject)
+        }
+        return addressList
+    }
 }
