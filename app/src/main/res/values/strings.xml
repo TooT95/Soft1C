@@ -42,6 +42,7 @@
     <string name="text_count_in_package">Count in package</string>
     <string name="text_save">Save</string>
     <string name="text_close">Close</string>
+    <string name="text_downloading">Downloading...</string>
 
     <array name="protocols">
         <item>http</item>

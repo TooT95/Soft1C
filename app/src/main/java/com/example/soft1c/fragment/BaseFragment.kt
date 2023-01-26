@@ -1,5 +1,6 @@
 package com.example.soft1c.fragment
 
+import android.app.AlertDialog
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -8,17 +9,19 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
+import com.example.soft1c.R
 import timber.log.Timber
 
 open class BaseFragment<T : ViewBinding>(
     private val layoutInflater: (
         layoutInflate: LayoutInflater,
         viewGroup: ViewGroup?,
-        attachToParent: Boolean
-    ) -> T
+        attachToParent: Boolean,
+    ) -> T,
 ) : Fragment() {
 
     private var _binding: T? = null
+    private lateinit var dialogLoading: AlertDialog
 
     val binding: T
         get() = _binding!!
@@ -26,7 +29,7 @@ open class BaseFragment<T : ViewBinding>(
     final override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): View? {
         _binding = layoutInflater.invoke(inflater, container, false)
         return _binding?.root
@@ -38,6 +41,7 @@ open class BaseFragment<T : ViewBinding>(
     }
 
     fun toast(text: String) {
+        closeDialogLoading()
         Toast.makeText(requireContext(), text, Toast.LENGTH_SHORT).show()
         Timber.d(text)
     }
@@ -53,4 +57,23 @@ open class BaseFragment<T : ViewBinding>(
         val sharedPreferences = requireContext().getSharedPreferences("", Context.MODE_PRIVATE)
         return sharedPreferences.getString(key, "") ?: ""
     }
+
+    fun showDialogLoading() {
+        val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_loading, null)
+        dialogLoading = AlertDialog.Builder(requireContext())
+            .setView(view)
+            .setCancelable(false)
+            .create()
+        if (!dialogLoading.isShowing) {
+            dialogLoading.show()
+        }
+    }
+
+    fun closeDialogLoading() {
+        if (dialogLoading.isShowing) {
+            dialogLoading.setCancelable(true)
+            dialogLoading.cancel()
+        }
+    }
+
 }

@@ -22,6 +22,7 @@ class AcceptanceViewModel(application: Application) : AndroidViewModel(applicati
 
     private val toastMutableData = SingleLiveEvent<String>()
     private val acceptanceListMutableData = MutableLiveData<List<Acceptance>>()
+    private val acceptanceMutableData = SingleLiveEvent<Acceptance>()
 
     val toastLiveData: LiveData<String>
         get() = toastMutableData
@@ -29,9 +30,18 @@ class AcceptanceViewModel(application: Application) : AndroidViewModel(applicati
     val acceptanceListLiveData: LiveData<List<Acceptance>>
         get() = acceptanceListMutableData
 
+    val acceptanceLiveData: LiveData<Acceptance>
+        get() = acceptanceMutableData
+
     fun getAcceptanceList() {
         viewModelScope.launch((exceptionScope + Dispatchers.IO)) {
             acceptanceListMutableData.postValue(repository.getAcceptanceListApi())
+        }
+    }
+
+    fun getAcceptance(number:String){
+        viewModelScope.launch((exceptionScope + Dispatchers.IO)) {
+            acceptanceMutableData.postValue(repository.getAcceptanceApi(number))
         }
     }
 

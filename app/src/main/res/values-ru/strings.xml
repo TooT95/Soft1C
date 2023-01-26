@@ -43,4 +43,5 @@
     <string name="text_count_in_package">Кол-во в упаковке</string>
     <string name="text_save">Записать</string>
     <string name="text_close">Закрыть</string>
+    <string name="text_downloading">Загрузка...</string>
 </resources>

@@ -10,15 +10,22 @@ import com.example.soft1c.R
 import com.example.soft1c.databinding.ItemAcceptanceBinding
 import com.example.soft1c.extension.inflateLayout
 import com.example.soft1c.model.Acceptance
+import com.example.soft1c.model.ItemClicked
 
-class AcceptanceAdapter :
+class AcceptanceAdapter(private val onItemClicked: (itemClicked: ItemClicked, acceptance: Acceptance) -> Unit) :
     ListAdapter<Acceptance, AcceptanceAdapter.AcceptanceHolder>(AcceptanceDiffUtil()) {
 
-    class AcceptanceHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class AcceptanceHolder(
+        private val onItemClicked: (itemClicked: ItemClicked, acceptance: Acceptance) -> Unit,
+        view: View,
+    ) : RecyclerView.ViewHolder(view) {
 
         private val binding = ItemAcceptanceBinding.bind(view)
 
         fun onBind(acceptance: Acceptance) {
+            itemView.setOnClickListener {
+                onItemClicked(ItemClicked.ITEM, acceptance)
+            }
             with(binding) {
                 binding.txtDocumentNumber.text = acceptance.number
                 binding.txtClient.text = acceptance.client
@@ -44,7 +51,7 @@ class AcceptanceAdapter :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AcceptanceHolder {
-        return AcceptanceHolder(parent.inflateLayout(R.layout.item_acceptance))
+        return AcceptanceHolder(onItemClicked, parent.inflateLayout(R.layout.item_acceptance))
     }
 
     override fun onBindViewHolder(holder: AcceptanceHolder, position: Int) {

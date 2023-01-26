@@ -1,6 +1,7 @@
 package com.example.soft1c.fragment
 
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
 import android.widget.CheckBox
 import androidx.core.view.isVisible
@@ -11,11 +12,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soft1c.R
 import com.example.soft1c.adapter.AcceptanceAdapter
 import com.example.soft1c.databinding.FragmentAcceptanceListBinding
+import com.example.soft1c.model.Acceptance
+import com.example.soft1c.model.ItemClicked
 import com.example.soft1c.viewmodel.AcceptanceViewModel
+import com.google.android.material.textfield.TextInputEditText
+import timber.log.Timber
 
 class AcceptanceListFragment :
     BaseFragment<FragmentAcceptanceListBinding>(FragmentAcceptanceListBinding::inflate) {
-
 
     private lateinit var acceptanceAdapter: AcceptanceAdapter
     private val viewModel: AcceptanceViewModel by viewModels()
@@ -28,8 +32,8 @@ class AcceptanceListFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.includeToolbar.toolbar.title = resources.getString(R.string.text_title_acceptance_list)
-
+        binding.includeToolbar.toolbar.title =
+            resources.getString(R.string.text_title_acceptance_list)
         initUI()
         obserViewModels()
     }
@@ -40,11 +44,18 @@ class AcceptanceListFragment :
             showPbLoading(false)
             acceptanceAdapter.submitList(it)
         }
+        viewModel.acceptanceLiveData.observe(viewLifecycleOwner) {
+            closeDialogLoading()
+            if (it.ref.isNotEmpty())
+                onItemClicked(ItemClicked.ITEM, it)
+            else
+                toast("Element not found")
+        }
     }
 
     private fun initUI() {
         showPbLoading(true)
-        acceptanceAdapter = AcceptanceAdapter()
+        acceptanceAdapter = AcceptanceAdapter(::onItemClicked)
         with(binding.rvAcceptanceList) {
             adapter = acceptanceAdapter
             setHasFixedSize(true)
@@ -74,10 +85,41 @@ class AcceptanceListFragment :
             chbSize.setOnClickListener(chbListener)
 
             ivAdd.setOnClickListener {
-
-                findNavController().navigate(R.id.action_acceptanceFragment_to_acceptanceFragment)
+                openAcceptanceDetail(Bundle())
+            }
+            etxtDocumentNumber.setOnKeyListener { eView, key, event ->
+                if (key == 66 && event.action == KeyEvent.ACTION_UP) {
+                    Timber.d("etxtDocumentNumber.setOnKeyListener $key")
+                    val thisView = (eView as TextInputEditText)
+                    if (thisView.text!!.isEmpty()) {
+                        thisView.error = resources.getString(R.string.text_field_is_empyt)
+                        thisView.requestFocus()
+                        return@setOnKeyListener false
+                    }
+                    thisView.error = null
+                    showDialogLoading()
+                    viewModel.getAcceptance(thisView.text.toString())
+                    return@setOnKeyListener true
+                }
+                return@setOnKeyListener false
             }
         }
+    }
+
+    private fun onItemClicked(itemClicked: ItemClicked, acceptance: Acceptance) {
+        when (itemClicked) {
+            ItemClicked.ITEM -> {
+                val args = Bundle().apply {
+                    putString(AcceptanceFragment.KEY_ACCEPTANCE_NUMBER, acceptance.number)
+                }
+                openAcceptanceDetail(args)
+            }
+            else -> return
+        }
+    }
+
+    private fun openAcceptanceDetail(bundle: Bundle) {
+        findNavController().navigate(R.id.action_acceptanceFragment_to_acceptanceFragment, bundle)
     }
 
     private fun showPbLoading(show: Boolean) {
@@ -86,4 +128,5 @@ class AcceptanceListFragment :
             pbLoading.isVisible = show
         }
     }
+
 }

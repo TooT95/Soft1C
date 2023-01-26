@@ -10,7 +10,14 @@
         android:id="@+id/include_toolbar"
         layout="@layout/toolbar_custom" />
 
+    <ProgressBar
+        android:id="@+id/pb_loading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
     <ScrollView
+        android:id="@+id/scroll_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/default_margin"
@@ -167,7 +174,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/white"
                         android:hint="@string/text_number_of_seats"
-                        android:inputType="textAutoCorrect" />
+                        android:inputType="numberDecimal" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -415,7 +422,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/white"
                         android:hint="@string/text_number_of_seats"
-                        android:inputType="textAutoCorrect" />
+                        android:inputType="numberDecimal" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -432,7 +439,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/white"
                         android:hint="@string/text_package_count"
-                        android:inputType="textAutoCorrect" />
+                        android:inputType="numberDecimal" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -453,7 +460,7 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/white"
                     android:hint="@string/text_count_in_package"
-                    android:inputType="textAutoCorrect" />
+                    android:inputType="numberDecimal" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
