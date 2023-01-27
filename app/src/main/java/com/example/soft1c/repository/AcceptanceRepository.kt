@@ -96,14 +96,19 @@ class AcceptanceRepository() {
             val countPackage = acceptJson.getInt(COUNT_PACKAGE_KEY)
 //            val allWeight = acceptJson.getDouble(ALL_WEIGHT_KEY)
             val packageUid = acceptJson.getString(PACKAGE_UID_KEY)
+            val packageName = getPackageNameFromUid(packageUid)
             val storeUid = acceptJson.getString(STORE_UID_KEY)
+            val storeAddressName = getAddressNameFromUid(storeUid)
             val productType = acceptJson.getString(PRODUCT_TYPE_KEY)
+            val productTypeName = getProductTypeFromUid(productType)
             val phoneNumber = acceptJson.getString(PHONE_KEY)
             val storeName = acceptJson.getString(STORE_NAME_KEY)
             val representativeName = acceptJson.getString(REPRESENTATIVE_NAME_KEY)
             val batchGuid = acceptJson.getString(BATCH_GUID_KEY)
             return Acceptance(ref = ref,
                 countPackage = countPackage,
+                storeAddressName = storeAddressName,
+                productTypeName = productTypeName,
                 batchGuid = batchGuid,
                 autoNumber = autoNumber,
                 countInPackage = countInPackage,
@@ -116,6 +121,7 @@ class AcceptanceRepository() {
                 storeUid = storeUid,
                 idCard = idCard,
                 zone = zoneName,
+                _package = packageName,
 //                allWeight = allWeight,
                 client = client,
                 zoneUid = zoneUid,
@@ -134,6 +140,27 @@ class AcceptanceRepository() {
             (it as AnyModel.Zone).ref == zoneUid
         } ?: return ""
         return (elem as AnyModel.Zone).name
+    }
+
+    private fun getProductTypeFromUid(zoneUid: String): String {
+        val elem = Utils.productTypes.find {
+            (it as AnyModel.ProductType).ref == zoneUid
+        } ?: return ""
+        return (elem as AnyModel.ProductType).name
+    }
+
+    private fun getPackageNameFromUid(zoneUid: String): String {
+        val elem = Utils.packages.find {
+            (it as AnyModel.PackageModel).ref == zoneUid
+        } ?: return ""
+        return (elem as AnyModel.PackageModel).name
+    }
+
+    private fun getAddressNameFromUid(zoneUid: String): String {
+        val elem = Utils.addressess.find {
+            (it as AnyModel.AddressModel).ref == zoneUid
+        } ?: return ""
+        return (elem as AnyModel.AddressModel).name
     }
 
     companion object {

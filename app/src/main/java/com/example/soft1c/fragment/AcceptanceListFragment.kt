@@ -42,7 +42,8 @@ class AcceptanceListFragment :
         initUI()
         observeViewModels()
         if (requiredTypes > 0)
-            showDialogLoading(resources.getString(R.string.text_address))
+            showDialogLoading()
+        setTextDialogLoading(resources.getString(R.string.text_address))
     }
 
     private fun observeViewModels() {
@@ -100,7 +101,9 @@ class AcceptanceListFragment :
                 openAcceptanceDetail(Bundle())
             }
             etxtDocumentNumber.setOnKeyListener(::findOpenDocumentByNumber)
+            chbAcceptance.isChecked = true
         }
+
     }
 
     private fun findOpenDocumentByNumber(eView: View, key: Int, event: KeyEvent): Boolean {
@@ -125,20 +128,17 @@ class AcceptanceListFragment :
         when (pairOf.first) {
             Utils.ObjectModelType.ADDRESS -> {
                 Utils.addressess = pairOf.second
-                closeDialogLoading()
-                showDialogLoading(resources.getString(R.string.text_package))
+                setTextDialogLoading(resources.getString(R.string.text_package))
                 baseViewModel.downloadType(Utils.ObjectModelType._PACKAGE)
             }
             Utils.ObjectModelType._PACKAGE -> {
                 Utils.packages = pairOf.second
-                closeDialogLoading()
-                showDialogLoading(resources.getString(R.string.text_product_type))
+                setTextDialogLoading(resources.getString(R.string.text_product_type))
                 baseViewModel.downloadType(Utils.ObjectModelType.PRODUCT_TYPE)
             }
             Utils.ObjectModelType.PRODUCT_TYPE -> {
                 Utils.productTypes = pairOf.second
-                closeDialogLoading()
-                showDialogLoading(resources.getString(R.string.text_zone))
+                setTextDialogLoading(resources.getString(R.string.text_zone))
                 baseViewModel.downloadType(Utils.ObjectModelType.ZONE)
             }
             Utils.ObjectModelType.ZONE -> {

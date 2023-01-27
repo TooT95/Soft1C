@@ -23,6 +23,7 @@ open class BaseFragment<T : ViewBinding>(
 
     private var _binding: T? = null
     private lateinit var dialogLoading: AlertDialog
+    private lateinit var viewDialog: View
 
     val binding: T
         get() = _binding!!
@@ -59,14 +60,17 @@ open class BaseFragment<T : ViewBinding>(
         return sharedPreferences.getString(key, "") ?: ""
     }
 
-    fun showDialogLoading(text: String = "") {
-        val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_loading, null)
+    fun setTextDialogLoading(text: String = "") {
         if (text.isNotEmpty()) {
-            val txt = view.findViewById<TextView>(R.id.txt_about)
+            val txt = viewDialog.findViewById<TextView>(R.id.txt_about)
             txt.text = resources.getString(R.string.text_downloading_text, text)
         }
+    }
+
+    fun showDialogLoading() {
+        viewDialog = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_loading, null)
         dialogLoading = AlertDialog.Builder(requireContext())
-            .setView(view)
+            .setView(viewDialog)
             .setCancelable(false)
             .create()
         if (!dialogLoading.isShowing) {

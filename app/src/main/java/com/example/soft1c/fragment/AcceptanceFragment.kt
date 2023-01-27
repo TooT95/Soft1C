@@ -1,7 +1,9 @@
 package com.example.soft1c.fragment
 
+import android.content.Context
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -9,12 +11,15 @@ import com.example.soft1c.R
 import com.example.soft1c.databinding.FragmentAcceptanceBinding
 import com.example.soft1c.model.Acceptance
 import com.example.soft1c.viewmodel.AcceptanceViewModel
+import com.google.android.material.textfield.TextInputEditText
 
 class AcceptanceFragment :
     BaseFragment<FragmentAcceptanceBinding>(FragmentAcceptanceBinding::inflate) {
 
     private var acceptanceNumber = ""
+    private var clientFound = false
     private val viewModel: AcceptanceViewModel by viewModels()
+//    private val codeClientDelay = 300L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,7 +43,10 @@ class AcceptanceFragment :
     private fun initUI() {
         if (acceptanceNumber.isNotEmpty())
             showPbLoading(true)
-
+        else {
+            enableFieldsAfterFieldClient(false)
+            setInitFocuses()
+        }
         with(binding) {
             includeToolbar.toolbar.title = resources.getString(R.string.text_title_acceptance)
             includeToolbar.toolbar.setNavigationOnClickListener {
@@ -51,8 +59,27 @@ class AcceptanceFragment :
             btnCloseCopy.setOnClickListener {
                 closeActivity()
             }
+        }
+    }
 
-            etxtAutoNumber.requestFocus()
+    private fun enableFieldsAfterFieldClient(enable: Boolean) {
+        clientFound = enable
+        with(binding) {
+            etxtAutoNumber.isEnabled = enable
+            etxtCardNumber.isEnabled = enable
+            etxtStoreNumber.isEnabled = enable
+            etxtRepresentative.isEnabled = enable
+            etxtStorePhone.isEnabled = enable
+            etxtSeatsNumber.isEnabled = enable
+            etxtPackageCount.isEnabled = enable
+            etxtCountInPackage.isEnabled = enable
+            etxtSeatsNumberCopy.isEnabled = enable
+            chbBrand.isEnabled = enable
+            chbArrow.isEnabled = enable
+            chbCurrency.isEnabled = enable
+            chbExclamation.isEnabled = enable
+            chbZ.isEnabled = enable
+            chPassport.isEnabled = enable
         }
     }
 
@@ -92,8 +119,33 @@ class AcceptanceFragment :
             etxtCountInPackage.setText(acc.countInPackage.toString())
             etxtDocumentNumberCopy.setText(acc.number)
         }
+        setInitFocuses()
         showPbLoading(false)
     }
+
+    private fun setInitFocuses() {
+        with(binding) {
+            with(etxtCodeClient) {
+                requestFocus()
+                val length = text?.length ?: 0
+                if (length > 0) setSelection(length)
+            }
+//            etxtCodeClient.setOnFocusChangeListener(::etxtFocusChangeListener)
+        }
+    }
+
+//    private fun etxtFocusChangeListener(view: View, hasFocus: Boolean) {
+//        if (hasFocus) {
+//            view.postDelayed({
+//                activity?.let {
+//                    val imm =
+//                        it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+//                    imm.showSoftInput(view.findFocus(), 0)
+//                }
+//            }, codeClientEmit)
+//
+//        }
+//    }
 
     private fun setCheckEmptyText(textV: TextView, text: String) {
         if (text.isNotEmpty()) {
