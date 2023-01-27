@@ -2,6 +2,7 @@ package com.example.soft1c.fragment
 
 import android.content.Context
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
@@ -10,6 +11,7 @@ import androidx.fragment.app.viewModels
 import com.example.soft1c.R
 import com.example.soft1c.databinding.FragmentAcceptanceBinding
 import com.example.soft1c.model.Acceptance
+import com.example.soft1c.model.Client
 import com.example.soft1c.viewmodel.AcceptanceViewModel
 import com.google.android.material.textfield.TextInputEditText
 
@@ -38,6 +40,12 @@ class AcceptanceFragment :
     private fun observeViewModels() {
         viewModel.acceptanceLiveData.observe(viewLifecycleOwner, ::showDetails)
         viewModel.toastLiveData.observe(viewLifecycleOwner, ::toast)
+        viewModel.clientLiveData.observe(viewLifecycleOwner, ::clientObserve)
+    }
+
+    private fun clientObserve(client: Client) {
+        enableFieldsAfterFieldClient(true)
+        closeDialogLoading()
     }
 
     private fun initUI() {
@@ -59,7 +67,31 @@ class AcceptanceFragment :
             btnCloseCopy.setOnClickListener {
                 closeActivity()
             }
+            etxtCodeClient.setOnKeyListener(::customSetOnKeyListener)
         }
+    }
+
+    private fun customSetOnKeyListener(view: View, key: Int, keyEvent: KeyEvent): Boolean {
+        if (key == 66 && keyEvent.action == KeyEvent.ACTION_UP) {
+            with(binding) {
+                val etxtView = view as TextInputEditText
+                if (etxtView.text!!.isEmpty()) {
+                    etxtView.error = resources.getString(R.string.text_field_is_empyt)
+                    return true
+                }
+                when (etxtView) {
+                    etxtCodeClient -> {
+                        showDialogLoading()
+                        viewModel.getClient(etxtView.text.toString())
+                        return true
+                    }
+                    else -> {
+                        return false
+                    }
+                }
+            }
+        }
+        return false
     }
 
     private fun enableFieldsAfterFieldClient(enable: Boolean) {

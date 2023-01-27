@@ -14,7 +14,7 @@ interface BaseApi {
     fun acceptanceList(): Call<ResponseBody>
 
     @GET("DanniePriemki")
-    fun acceptance(@Query("Nomer") number:String): Call<ResponseBody>
+    fun acceptance(@Query("Nomer") number: String): Call<ResponseBody>
 
     @GET("Addressa")
     fun addressList(): Call<ResponseBody>
@@ -27,4 +27,7 @@ interface BaseApi {
 
     @GET("VidiTovarov")
     fun productTypeList(): Call<ResponseBody>
+
+    @GET("Klienti")
+    fun client(@Query("Kod") clientCode: String): Call<ResponseBody>
 }

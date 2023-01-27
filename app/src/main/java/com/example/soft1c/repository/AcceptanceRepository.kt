@@ -3,6 +3,7 @@ package com.example.soft1c.repository
 import com.example.soft1c.Utils
 import com.example.soft1c.model.Acceptance
 import com.example.soft1c.model.AnyModel
+import com.example.soft1c.model.Client
 import com.example.soft1c.network.Network
 import okhttp3.ResponseBody
 import org.json.JSONArray
@@ -61,6 +62,33 @@ class AcceptanceRepository() {
             })
         }
 
+    }
+
+    suspend fun getClientApi(clientCode: String): Client {
+        return suspendCoroutine { continuation ->
+            Network.api.client(clientCode).enqueue(object : Callback<ResponseBody> {
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>,
+                ) {
+                    if (response.isSuccessful) {
+                        val responseBody = response.body()?.string() ?: ""
+                        val jsonObject = JSONArray(responseBody).getJSONObject(0)
+                        val code = jsonObject.getString(Client.CODE_KEY)
+                        val serialDoc = jsonObject.getString(Client.SERAIL_DOC_KEY)
+                        val numberDoc = jsonObject.getString(Client.NUMBER_DOC_KEY)
+                        continuation.resume(Client(code, serialDoc, numberDoc))
+                    } else {
+                        continuation.resume(Client())
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    continuation.resumeWithException(t)
+                }
+
+            })
+        }
     }
 
     private fun getAcceptanceJson(responseString: String): Acceptance {
