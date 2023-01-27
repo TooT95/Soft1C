@@ -42,25 +42,32 @@ class BaseRepository() {
 
     suspend fun getAnyApi(type: Int): Pair<Int, List<AnyModel>> {
         return suspendCoroutine { continuation ->
-            Network.api.addressList().enqueue(object : Callback<ResponseBody> {
-                override fun onResponse(
-                    call: Call<ResponseBody>,
-                    response: Response<ResponseBody>,
-                ) {
-                    if (response.isSuccessful) {
-                        val responseBody = response.body()?.string() ?: ""
-                        continuation.resume(Pair(type, getAddressListJson(responseBody, type)))
-                    } else {
-                        continuation.resume(Pair(Utils.ObjectModelType.EMPTY, emptyList()))
+            when (type) {
+                Utils.ObjectModelType.ADDRESS -> Network.api.addressList()
+                Utils.ObjectModelType._PACKAGE -> Network.api.packageList()
+                Utils.ObjectModelType.PRODUCT_TYPE -> Network.api.productTypeList()
+                Utils.ObjectModelType.ZONE -> Network.api.zoneList()
+                else -> Network.api.addressList()
+            }
+                .enqueue(object : Callback<ResponseBody> {
+                    override fun onResponse(
+                        call: Call<ResponseBody>,
+                        response: Response<ResponseBody>,
+                    ) {
+                        if (response.isSuccessful) {
+                            val responseBody = response.body()?.string() ?: ""
+                            continuation.resume(Pair(type, getAddressListJson(responseBody, type)))
+                        } else {
+                            continuation.resume(Pair(Utils.ObjectModelType.EMPTY, emptyList()))
+                        }
+
                     }
 
-                }
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                        continuation.resumeWithException(t)
+                    }
 
-                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                    continuation.resumeWithException(t)
-                }
-
-            })
+                })
 
         }
     }
@@ -71,8 +78,8 @@ class BaseRepository() {
         for (item in 0 until arrayJson.length()) {
             val objectJson = arrayJson.getJSONObject(item)
             val ref = objectJson.getString(Utils.Contracts.REF_KEY)
-            val name = objectJson.getString(Utils.Contracts.REF_KEY)
-            val code = objectJson.getString(Utils.Contracts.REF_KEY)
+            val name = objectJson.getString(Utils.Contracts.NAME_KEY)
+            val code = objectJson.getString(Utils.Contracts.CODE_KEY)
             val anyObject = when (type) {
                 Utils.ObjectModelType.ADDRESS -> AnyModel.AddressModel(ref, name, code)
                 Utils.ObjectModelType._PACKAGE -> AnyModel.PackageModel(ref, name, code)

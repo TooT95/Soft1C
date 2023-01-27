@@ -42,7 +42,11 @@
     <string name="text_count_in_package">Count in package</string>
     <string name="text_save">Save</string>
     <string name="text_close">Close</string>
-    <string name="text_downloading">Downloading...</string>
+    <string name="text_downloading">Downloading…</string>
+    <string name="text_downloading_text">Downloading %s…</string>
+
+    <string name="text_address">address</string>
+    <string name="text_element_not_found">Element not found</string>
 
     <array name="protocols">
         <item>http</item>

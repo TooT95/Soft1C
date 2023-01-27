@@ -16,11 +16,9 @@ import com.example.soft1c.databinding.FragmentAcceptanceListBinding
 import com.example.soft1c.model.Acceptance
 import com.example.soft1c.model.AnyModel
 import com.example.soft1c.model.ItemClicked
-import com.example.soft1c.repository.BaseRepository
 import com.example.soft1c.viewmodel.AcceptanceViewModel
 import com.example.soft1c.viewmodel.BaseViewModel
 import com.google.android.material.textfield.TextInputEditText
-import timber.log.Timber
 
 class AcceptanceListFragment :
     BaseFragment<FragmentAcceptanceListBinding>(FragmentAcceptanceListBinding::inflate) {
@@ -29,7 +27,7 @@ class AcceptanceListFragment :
     private val viewModel: AcceptanceViewModel by viewModels()
     private val baseViewModel: BaseViewModel by viewModels()
 
-
+    private var requiredTypes = 4
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         viewModel.getAcceptanceList()
@@ -42,23 +40,29 @@ class AcceptanceListFragment :
         binding.includeToolbar.toolbar.title =
             resources.getString(R.string.text_title_acceptance_list)
         initUI()
-        obserViewModels()
+        observeViewModels()
+        if (requiredTypes > 0)
+            showDialogLoading(resources.getString(R.string.text_address))
     }
 
-    private fun obserViewModels() {
+    private fun observeViewModels() {
         viewModel.toastLiveData.observe(viewLifecycleOwner, ::toast)
-        viewModel.acceptanceListLiveData.observe(viewLifecycleOwner) {
-            showPbLoading(false)
-            acceptanceAdapter.submitList(it)
-        }
-        viewModel.acceptanceLiveData.observe(viewLifecycleOwner) {
-            closeDialogLoading()
-            if (it.ref.isNotEmpty())
-                onItemClicked(ItemClicked.ITEM, it)
-            else
-                toast("Element not found")
-        }
+        viewModel.acceptanceListLiveData.observe(viewLifecycleOwner, ::showAcceptanceList)
+        viewModel.acceptanceLiveData.observe(viewLifecycleOwner, ::acceptanceByNumber)
         baseViewModel.anyObjectLiveData.observe(viewLifecycleOwner, ::checkModelAndDownload)
+    }
+
+    private fun showAcceptanceList(list: List<Acceptance>) {
+        showPbLoading(false)
+        acceptanceAdapter.submitList(list)
+    }
+
+    private fun acceptanceByNumber(acceptance: Acceptance) {
+        closeDialogLoading()
+        if (acceptance.ref.isNotEmpty())
+            onItemClicked(ItemClicked.ITEM, acceptance)
+        else
+            toast(resources.getString(R.string.text_element_not_found))
     }
 
     private fun initUI() {
@@ -117,9 +121,31 @@ class AcceptanceListFragment :
 
 
     private fun checkModelAndDownload(pairOf: Pair<Int, List<AnyModel>>) {
-        val type = pairOf.first
-        val listOfData = pairOf.second
-        toast(type.toString())
+        requiredTypes -= 1
+        when (pairOf.first) {
+            Utils.ObjectModelType.ADDRESS -> {
+                Utils.addressess = pairOf.second
+                closeDialogLoading()
+                showDialogLoading(resources.getString(R.string.text_package))
+                baseViewModel.downloadType(Utils.ObjectModelType._PACKAGE)
+            }
+            Utils.ObjectModelType._PACKAGE -> {
+                Utils.packages = pairOf.second
+                closeDialogLoading()
+                showDialogLoading(resources.getString(R.string.text_product_type))
+                baseViewModel.downloadType(Utils.ObjectModelType.PRODUCT_TYPE)
+            }
+            Utils.ObjectModelType.PRODUCT_TYPE -> {
+                Utils.productTypes = pairOf.second
+                closeDialogLoading()
+                showDialogLoading(resources.getString(R.string.text_zone))
+                baseViewModel.downloadType(Utils.ObjectModelType.ZONE)
+            }
+            Utils.ObjectModelType.ZONE -> {
+                Utils.zones = pairOf.second
+                closeDialogLoading()
+            }
+        }
     }
 
     private fun onItemClicked(itemClicked: ItemClicked, acceptance: Acceptance) {

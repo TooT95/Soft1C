@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.viewbinding.ViewBinding
@@ -58,8 +59,12 @@ open class BaseFragment<T : ViewBinding>(
         return sharedPreferences.getString(key, "") ?: ""
     }
 
-    fun showDialogLoading() {
+    fun showDialogLoading(text: String = "") {
         val view = LayoutInflater.from(requireContext()).inflate(R.layout.dialog_loading, null)
+        if (text.isNotEmpty()) {
+            val txt = view.findViewById<TextView>(R.id.txt_about)
+            txt.text = resources.getString(R.string.text_downloading_text, text)
+        }
         dialogLoading = AlertDialog.Builder(requireContext())
             .setView(view)
             .setCancelable(false)
@@ -70,6 +75,9 @@ open class BaseFragment<T : ViewBinding>(
     }
 
     fun closeDialogLoading() {
+        if (!::dialogLoading.isInitialized) {
+            return
+        }
         if (dialogLoading.isShowing) {
             dialogLoading.setCancelable(true)
             dialogLoading.cancel()

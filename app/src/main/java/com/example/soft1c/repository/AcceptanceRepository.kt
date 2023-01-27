@@ -1,6 +1,8 @@
 package com.example.soft1c.repository
 
+import com.example.soft1c.Utils
 import com.example.soft1c.model.Acceptance
+import com.example.soft1c.model.AnyModel
 import com.example.soft1c.network.Network
 import okhttp3.ResponseBody
 import org.json.JSONArray
@@ -86,6 +88,7 @@ class AcceptanceRepository() {
         if (hasAdditionalFields) {
             val ref = acceptJson.getString(REF_KEY)
             val zoneUid = acceptJson.getString(ZONE_KEY)
+            val zoneName = getZoneNameFromUid(zoneUid)
             val autoNumber = acceptJson.getString(AUTO_NUMBER_KEY)
             val idCard = acceptJson.getString(ID_CARD_KEY)
             val countSeat = acceptJson.getInt(COUNT_SEAT_KEY)
@@ -112,6 +115,7 @@ class AcceptanceRepository() {
                 countSeat = countSeat,
                 storeUid = storeUid,
                 idCard = idCard,
+                zone = zoneName,
 //                allWeight = allWeight,
                 client = client,
                 zoneUid = zoneUid,
@@ -123,6 +127,13 @@ class AcceptanceRepository() {
             client = client,
             weight = weight,
             capacity = capacity)
+    }
+
+    private fun getZoneNameFromUid(zoneUid: String): String {
+        val elem = Utils.zones.find {
+            (it as AnyModel.Zone).ref == zoneUid
+        } ?: return ""
+        return (elem as AnyModel.Zone).name
     }
 
     companion object {
