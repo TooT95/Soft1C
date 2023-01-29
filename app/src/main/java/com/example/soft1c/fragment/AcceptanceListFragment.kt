@@ -67,6 +67,7 @@ class AcceptanceListFragment :
     }
 
     private fun initUI() {
+        if (Utils.refreshList) viewModel.getAcceptanceList()
         showPbLoading(true)
         acceptanceAdapter = AcceptanceAdapter(::onItemClicked)
         with(binding.rvAcceptanceList) {

@@ -21,10 +21,8 @@ class AcceptanceFragment :
     BaseFragment<FragmentAcceptanceBinding>(FragmentAcceptanceBinding::inflate) {
 
     private var clientFound = false
-    private lateinit var client: Client
     private lateinit var acceptance: Acceptance
     private val viewModel: AcceptanceViewModel by viewModels()
-//    private val codeClientDelay = 300L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -76,13 +74,21 @@ class AcceptanceFragment :
         viewModel.acceptanceLiveData.observe(viewLifecycleOwner, ::showDetails)
         viewModel.toastLiveData.observe(viewLifecycleOwner, ::toast)
         viewModel.clientLiveData.observe(viewLifecycleOwner, ::clientObserve)
+        viewModel.createUpdateLiveData.observe(viewLifecycleOwner, ::createUpdateAcceptance)
+    }
+
+    private fun createUpdateAcceptance(pair: Pair<Acceptance, Boolean>) {
+        if (!pair.second) return
+        Utils.refreshList = true
+        activity?.onBackPressed()
     }
 
     private fun clientObserve(it: Client) {
         enableFieldsAfterFieldClient(true)
         closeDialogLoading()
-        client = it
         clientFound = true
+        acceptance.client = it.code
+        showAcceptance()
         navigateSearchModel(Utils.ObjectModelType.ZONE)
     }
 
@@ -98,7 +104,7 @@ class AcceptanceFragment :
         if (acceptance.number.isNotEmpty() && !clientFound)
             showPbLoading(true)
         else if (acceptance.number.isEmpty()) {
-            enableFieldsAfterFieldClient(false)
+            enableFieldsAfterFieldClient(clientFound)
             setInitFocuses()
         }
         showAcceptance()
@@ -142,7 +148,39 @@ class AcceptanceFragment :
             etxtStorePhone.setOnFocusChangeListener(::etxtFocusChangeListener)
 
             chbZ.setOnClickListener(::setCheckResult)
+            chbExclamation.setOnClickListener(::setCheckResult)
+            chbCurrency.setOnClickListener(::setCheckResult)
+            chbArrow.setOnClickListener(::setCheckResult)
+            chbBrand.setOnClickListener(::setCheckResult)
+
+            btnSave.setOnClickListener {
+                createUpdateAcceptance()
+            }
+            btnSaveCopy.setOnClickListener {
+                createUpdateAcceptance()
+            }
         }
+    }
+
+    private fun createUpdateAcceptance() {
+        with(binding) {
+            acceptance.client = etxtCodeClient.text.toString()
+            acceptance.autoNumber = etxtAutoNumber.text.toString()
+            acceptance.idCard = etxtCardNumber.text.toString()
+            acceptance.storeName = etxtStoreNumber.text.toString()
+            acceptance.representativeName = etxtRepresentative.text.toString()
+            acceptance.phoneNumber = etxtStoreNumber.text.toString()
+            val seatCount = etxtSeatsNumberCopy.text.toString()
+            if (seatCount.isNotEmpty())
+                acceptance.countSeat = seatCount.toInt()
+            val packageCount = etxtPackageCount.text.toString()
+            if (packageCount.isNotEmpty())
+                acceptance.countPackage = packageCount.toInt()
+            val countInPackage = etxtCountInPackage.text.toString()
+            if (countInPackage.isNotEmpty())
+                acceptance.countInPackage = countInPackage.toInt()
+        }
+        viewModel.createUpdateAcceptance(acceptance)
     }
 
     private fun setCheckResult(view: View) {
@@ -280,6 +318,7 @@ class AcceptanceFragment :
 
 
     private fun setInitFocuses() {
+        if (clientFound) return
         with(binding) {
             with(etxtCodeClient) {
                 requestFocus()

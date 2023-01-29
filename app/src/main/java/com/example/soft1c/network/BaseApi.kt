@@ -1,9 +1,9 @@
 package com.example.soft1c.network
 
-import retrofit2.http.GET
+import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface BaseApi {
 
@@ -30,4 +30,7 @@ interface BaseApi {
 
     @GET("Klienti")
     fun client(@Query("Kod") clientCode: String): Call<ResponseBody>
+
+    @PATCH("Priemki")
+    fun createUpdateAcceptance(@Body requestBody: RequestBody): Call<ResponseBody>
 }

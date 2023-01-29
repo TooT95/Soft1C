@@ -5,6 +5,8 @@ import com.example.soft1c.model.Acceptance
 import com.example.soft1c.model.AnyModel
 import com.example.soft1c.model.Client
 import com.example.soft1c.network.Network
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
 import org.json.JSONArray
 import org.json.JSONObject
@@ -15,7 +17,7 @@ import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 import kotlin.coroutines.suspendCoroutine
 
-class AcceptanceRepository() {
+class AcceptanceRepository {
 
     suspend fun getAcceptanceApi(number: String): Acceptance {
         return suspendCoroutine { continuation ->
@@ -91,6 +93,55 @@ class AcceptanceRepository() {
         }
     }
 
+    suspend fun createUpdateAccApi(acceptance: Acceptance): Pair<Acceptance, Boolean> {
+        return suspendCoroutine { continuation ->
+            val jsonObject = JSONObject()
+            if (acceptance.ref.isNotEmpty())
+                jsonObject.put(REF_KEY, acceptance.ref)
+            else
+                jsonObject.put(REF_KEY, null)
+            jsonObject.put(CLIENT_KEY, acceptance.client)
+            jsonObject.put(PACKAGE_UID_KEY, acceptance.packageUid)
+            jsonObject.put(ZONE_KEY, acceptance.zoneUid)
+            jsonObject.put(ID_CARD_KEY, acceptance.idCard)
+            jsonObject.put(STORE_UID_KEY, acceptance.storeUid)
+            jsonObject.put(PHONE_KEY, acceptance.phoneNumber)
+            jsonObject.put(STORE_NAME_KEY, acceptance.storeName)
+            jsonObject.put(PRODUCT_TYPE_KEY, acceptance.productType)
+            jsonObject.put(REPRESENTATIVE_NAME_KEY, acceptance.representativeName)
+            jsonObject.put(AUTO_NUMBER_KEY, acceptance.autoNumber)
+            jsonObject.put(COUNT_SEAT_KEY, acceptance.countSeat)
+            jsonObject.put(COUNT_IN_PACKAGE_KEY, acceptance.countInPackage)
+            jsonObject.put(ALL_WEIGHT_KEY, acceptance.allWeight)
+            jsonObject.put(GLASS_KEY, acceptance.glass)
+            jsonObject.put(EXPENSIVE_KEY, acceptance.expensive)
+            jsonObject.put(Z_KEY, acceptance.z)
+            jsonObject.put(NOT_TURN_OVER_KEY, acceptance.notTurnOver)
+            jsonObject.put(BRAND_KEY, acceptance.brand)
+            jsonObject.put(COUNT_PACKAGE_KEY, acceptance.countPackage)
+            val requestBody =
+                jsonObject.toString().toRequestBody("application/json".toMediaTypeOrNull())
+            Network.api.createUpdateAcceptance(requestBody)
+                .enqueue(object : Callback<ResponseBody> {
+                    override fun onResponse(
+                        call: Call<ResponseBody>,
+                        response: Response<ResponseBody>,
+                    ) {
+                        if (response.isSuccessful) {
+                            continuation.resume(Pair(acceptance, true))
+                        } else {
+                            continuation.resume(Pair(acceptance, false))
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                        continuation.resumeWithException(t)
+                    }
+
+                })
+        }
+    }
+
     private fun getAcceptanceJson(responseString: String): Acceptance {
         val jsonArray = JSONArray(responseString)
         return getaAcceptanceFromJsonObject(jsonArray.getJSONObject(0), true)
@@ -122,7 +173,7 @@ class AcceptanceRepository() {
             val countSeat = acceptJson.getInt(COUNT_SEAT_KEY)
             val countInPackage = acceptJson.getInt(COUNT_IN_PACKAGE_KEY)
             val countPackage = acceptJson.getInt(COUNT_PACKAGE_KEY)
-//            val allWeight = acceptJson.getDouble(ALL_WEIGHT_KEY)
+            val allWeight = acceptJson.getDouble(ALL_WEIGHT_KEY)
             val packageUid = acceptJson.getString(PACKAGE_UID_KEY)
             val packageName = getPackageNameFromUid(packageUid)
             val storeUid = acceptJson.getString(STORE_UID_KEY)
@@ -161,7 +212,7 @@ class AcceptanceRepository() {
                 idCard = idCard,
                 zone = zoneName,
                 _package = packageName,
-//                allWeight = allWeight,
+                allWeight = allWeight,
                 client = client,
                 zoneUid = zoneUid,
                 representativeName = representativeName
@@ -217,7 +268,7 @@ class AcceptanceRepository() {
         private const val COUNT_SEAT_KEY = "КоличествоМест"
         private const val COUNT_IN_PACKAGE_KEY = "КоличествоВУпаковке"
         private const val COUNT_PACKAGE_KEY = "КоличествоТиповУпаковок"
-        private const val ALL_WEIGHT_KEY = "КоличествоТиповУпаковок"
+        private const val ALL_WEIGHT_KEY = "ОбщийВес"
         private const val PACKAGE_UID_KEY = "ТипУпаковки"
         private const val PRODUCT_TYPE_KEY = "ВидТовара"
         private const val STORE_UID_KEY = "АдресМагазина"

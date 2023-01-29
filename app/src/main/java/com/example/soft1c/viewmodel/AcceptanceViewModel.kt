@@ -25,6 +25,7 @@ class AcceptanceViewModel(application: Application) : AndroidViewModel(applicati
     private val acceptanceListMutableData = MutableLiveData<List<Acceptance>>()
     private val acceptanceMutableData = SingleLiveEvent<Acceptance>()
     private val clientMutableData = SingleLiveEvent<Client>()
+    private val createUpdateMutableData = SingleLiveEvent<Pair<Acceptance, Boolean>>()
 
     val toastLiveData: LiveData<String>
         get() = toastMutableData
@@ -36,7 +37,10 @@ class AcceptanceViewModel(application: Application) : AndroidViewModel(applicati
         get() = acceptanceMutableData
 
     val clientLiveData: LiveData<Client>
-            get() = clientMutableData
+        get() = clientMutableData
+
+    val createUpdateLiveData: LiveData<Pair<Acceptance, Boolean>>
+        get() = createUpdateMutableData
 
     fun getAcceptanceList() {
         viewModelScope.launch((exceptionScope + Dispatchers.IO)) {
@@ -53,6 +57,12 @@ class AcceptanceViewModel(application: Application) : AndroidViewModel(applicati
     fun getClient(clientCode: String) {
         viewModelScope.launch((exceptionScope + Dispatchers.IO)) {
             clientMutableData.postValue(repository.getClientApi(clientCode))
+        }
+    }
+
+    fun createUpdateAcceptance(acceptance: Acceptance) {
+        viewModelScope.launch((exceptionScope + Dispatchers.IO)) {
+            createUpdateMutableData.postValue(repository.createUpdateAccApi(acceptance))
         }
     }
 }

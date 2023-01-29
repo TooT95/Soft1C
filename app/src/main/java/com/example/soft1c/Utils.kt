@@ -13,6 +13,7 @@ object Utils {
     var packages: List<AnyModel> = listOf()
     var zones: List<AnyModel> = listOf()
     var anyModel: AnyModel? = null
+    var refreshList: Boolean = false
 
     fun setAttributes(baseUrl: String, base_name: String, user_name: String, _password: String) {
         base_url = baseUrl
