@@ -46,5 +46,9 @@
         android:id="@+id/acceptanceFragment"
         android:name="com.example.soft1c.fragment.AcceptanceFragment"
         android:label="AcceptanceFragment"
-        tools:layout="@layout/fragment_acceptance" />
+        tools:layout="@layout/fragment_acceptance" >
+        <action
+            android:id="@+id/action_acceptanceFragment_to_searchFragment"
+            app:destination="@id/searchFragment" />
+    </fragment>
 </navigation>

@@ -8,9 +8,12 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.example.soft1c.R
+import com.example.soft1c.Utils
 import com.example.soft1c.databinding.FragmentAcceptanceBinding
 import com.example.soft1c.model.Acceptance
+import com.example.soft1c.model.AnyModel
 import com.example.soft1c.model.Client
 import com.example.soft1c.viewmodel.AcceptanceViewModel
 import com.google.android.material.textfield.TextInputEditText
@@ -20,6 +23,8 @@ class AcceptanceFragment :
 
     private var acceptanceNumber = ""
     private var clientFound = false
+    private lateinit var client: Client
+    private lateinit var zone: AnyModel.Zone
     private val viewModel: AcceptanceViewModel by viewModels()
 //    private val codeClientDelay = 300L
 
@@ -28,6 +33,14 @@ class AcceptanceFragment :
         acceptanceNumber = arguments?.getString(KEY_ACCEPTANCE_NUMBER, "") ?: ""
         if (acceptanceNumber.isNotEmpty()) {
             viewModel.getAcceptance(acceptanceNumber)
+        }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if (Utils.zone != null) {
+            zone = Utils.zone as AnyModel.Zone
+            binding.txtZone.text = zone.name
         }
     }
 
@@ -43,9 +56,14 @@ class AcceptanceFragment :
         viewModel.clientLiveData.observe(viewLifecycleOwner, ::clientObserve)
     }
 
-    private fun clientObserve(client: Client) {
+    private fun clientObserve(it: Client) {
         enableFieldsAfterFieldClient(true)
         closeDialogLoading()
+        client = it
+        findNavController().navigate(R.id.action_acceptanceFragment_to_searchFragment,
+            Bundle().apply {
+                putInt(SearchFragment.KEY_MODEL, Utils.ObjectModelType.ZONE)
+            })
     }
 
     private fun initUI() {

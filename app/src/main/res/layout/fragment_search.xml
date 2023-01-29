@@ -2,8 +2,11 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/default_margin"
     android:orientation="vertical">
+
+    <include
+        android:id="@+id/include_toolbar"
+        layout="@layout/toolbar_custom" />
 
     <SearchView
         android:id="@+id/sv_text"
@@ -19,6 +22,7 @@
     <ListView
         android:id="@+id/listview_result"
         android:layout_width="match_parent"
-        android:layout_height="fill_parent" />
+        android:layout_height="fill_parent"
+        android:layout_margin="@dimen/default_margin" />
 
 </LinearLayout>

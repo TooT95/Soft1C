@@ -10,19 +10,41 @@ import android.widget.SearchView
 import androidx.core.os.bundleOf
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.findNavController
+import com.bumptech.glide.util.Util
 import com.example.soft1c.R
+import com.example.soft1c.Utils
 import com.example.soft1c.databinding.FragmentSearchBinding
+import com.example.soft1c.model.AnyModel
 import timber.log.Timber
 
 class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding::inflate) {
 
     lateinit var listAdapter: ArrayAdapter<String>
-    lateinit var programmingLanguagesList: ArrayList<String>
-
+    lateinit var modelList: ArrayList<String>
+    var model: Int = 0
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        activity?.let {
-            it.title = resources.getString(R.string.text_title_search)
+        modelList = ArrayList()
+        arguments?.let {
+            model = it.getInt(KEY_MODEL, 0)
+        }
+        with(binding.includeToolbar.toolbar) {
+            var resourseId = 0
+            when (model) {
+                Utils.ObjectModelType.ZONE -> {
+                    resourseId = R.string.text_zone
+                    modelList.addAll(Utils.zones.map {
+                        (it as AnyModel.Zone).name
+                    })
+                }
+                else -> {
+                    resourseId = R.string.text_title_search
+                }
+            }
+            title = resources.getString(resourseId)
+            setNavigationOnClickListener {
+                activity?.onBackPressed()
+            }
         }
         initUI()
     }
@@ -33,15 +55,6 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding
     }
 
     private fun initUI() {
-        programmingLanguagesList = ArrayList()
-        programmingLanguagesList.add("koropka")
-        programmingLanguagesList.add("korupka#")
-        programmingLanguagesList.add("koropka")
-        programmingLanguagesList.add("shtuka")
-        programmingLanguagesList.add("shtika")
-        programmingLanguagesList.add("korpus")
-        programmingLanguagesList.add("shtose")
-
         with(binding) {
             svText.setOnQueryTextFocusChangeListener { view, hasFocus ->
                 if (hasFocus) {
@@ -61,7 +74,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding
             listAdapter = ArrayAdapter<String>(
                 requireContext(),
                 android.R.layout.simple_list_item_1,
-                programmingLanguagesList
+                modelList
             )
             listviewResult.adapter = listAdapter
 
@@ -72,7 +85,15 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding
 
             svText.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    TestFragment.resultForSearch = listAdapter.getItem(0).toString()
+                    val element = when (model) {
+                        Utils.ObjectModelType.ZONE -> {
+                            Utils.zones.find {
+                                (it as AnyModel.Zone).name == query
+                            }
+                        }
+                        else -> null
+                    } ?: return false
+                    Utils.zone = element
                     activity?.onBackPressed()
                     return false
                 }
@@ -86,7 +107,7 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding
     }
 
     companion object {
-        const val KEY_RESULT = "key_result"
+        const val KEY_MODEL = "key_model"
     }
 
 }
