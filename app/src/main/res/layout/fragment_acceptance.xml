@@ -376,39 +376,6 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/linear_package"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/default_margin_chb"
-                android:orientation="horizontal"
-                android:weightSum="20"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/linear_product_type">
-
-                <TextView
-                    android:id="@+id/txt_package"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/default_margin"
-                    android:layout_weight="18"
-                    android:background="@drawable/rectangle"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/default_margin"
-                    android:text="@string/text_package"
-                    android:textSize="16sp" />
-
-                <ImageView
-                    android:id="@+id/iv_choose_package"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="2"
-                    android:contentDescription="@string/app_name"
-                    android:src="@drawable/ic_choose_elem" />
-
-            </LinearLayout>
-
-            <LinearLayout
                 android:id="@+id/lienar_package_seats"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -416,7 +383,7 @@
                 android:baselineAligned="false"
                 android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/linear_package">
+                app:layout_constraintTop_toBottomOf="@id/linear_product_type">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/elayout_seats_number_copy"
@@ -453,6 +420,39 @@
 
             </LinearLayout>
 
+            <LinearLayout
+                android:id="@+id/linear_package"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin_chb"
+                android:orientation="horizontal"
+                android:weightSum="20"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/lienar_package_seats">
+
+                <TextView
+                    android:id="@+id/txt_package"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_marginStart="@dimen/default_margin"
+                    android:layout_weight="18"
+                    android:background="@drawable/rectangle"
+                    android:gravity="center_vertical"
+                    android:paddingLeft="@dimen/default_margin"
+                    android:text="@string/text_package"
+                    android:textSize="16sp" />
+
+                <ImageView
+                    android:id="@+id/iv_choose_package"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="2"
+                    android:contentDescription="@string/app_name"
+                    android:src="@drawable/ic_choose_elem" />
+
+            </LinearLayout>
+
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/elayout_count_in_package"
                 android:layout_width="match_parent"
@@ -460,7 +460,7 @@
                 android:layout_marginTop="@dimen/default_margin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/lienar_package_seats">
+                app:layout_constraintTop_toBottomOf="@id/linear_package">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etxt_count_in_package"

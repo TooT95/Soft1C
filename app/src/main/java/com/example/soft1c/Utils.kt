@@ -12,7 +12,7 @@ object Utils {
     var addressess: List<AnyModel> = listOf()
     var packages: List<AnyModel> = listOf()
     var zones: List<AnyModel> = listOf()
-    var zone: AnyModel? = null
+    var anyModel: AnyModel? = null
 
     fun setAttributes(baseUrl: String, base_name: String, user_name: String, _password: String) {
         base_url = baseUrl

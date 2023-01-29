@@ -37,6 +37,24 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding
                         (it as AnyModel.Zone).name
                     })
                 }
+                Utils.ObjectModelType.ADDRESS -> {
+                    resourseId = R.string.text_address
+                    modelList.addAll(Utils.addressess.map {
+                        (it as AnyModel.AddressModel).name
+                    })
+                }
+                Utils.ObjectModelType.PRODUCT_TYPE -> {
+                    resourseId = R.string.text_product_type
+                    modelList.addAll(Utils.productTypes.map {
+                        (it as AnyModel.ProductType).name
+                    })
+                }
+                Utils.ObjectModelType._PACKAGE -> {
+                    resourseId = R.string.text_package
+                    modelList.addAll(Utils.packages.map {
+                        (it as AnyModel.PackageModel).name
+                    })
+                }
                 else -> {
                     resourseId = R.string.text_title_search
                 }
@@ -78,22 +96,17 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding
             )
             listviewResult.adapter = listAdapter
 
-            listviewResult.setOnItemClickListener { _, _, position, p3 ->
-                TestFragment.resultForSearch = listAdapter.getItem(position).toString()
+            listviewResult.setOnItemClickListener { _, _, position, _ ->
+                val element = selectCloseModel(position) ?: return@setOnItemClickListener
+                Utils.anyModel = element
                 activity?.onBackPressed()
             }
 
             svText.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
                 override fun onQueryTextSubmit(query: String?): Boolean {
-                    val element = when (model) {
-                        Utils.ObjectModelType.ZONE -> {
-                            Utils.zones.find {
-                                (it as AnyModel.Zone).name == query
-                            }
-                        }
-                        else -> null
-                    } ?: return false
-                    Utils.zone = element
+                    if (listAdapter.count <= 0) return false
+                    val element = selectCloseModel(0) ?: return false
+                    Utils.anyModel = element
                     activity?.onBackPressed()
                     return false
                 }
@@ -103,6 +116,32 @@ class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding
                     return false
                 }
             })
+        }
+    }
+
+    private fun selectCloseModel(position: Int): AnyModel? {
+        return when (model) {
+            Utils.ObjectModelType.ZONE -> {
+                Utils.zones.find {
+                    (it as AnyModel.Zone).name == listAdapter.getItem(position)
+                }
+            }
+            Utils.ObjectModelType.ADDRESS -> {
+                Utils.addressess.find {
+                    (it as AnyModel.AddressModel).name == listAdapter.getItem(position)
+                }
+            }
+            Utils.ObjectModelType.PRODUCT_TYPE -> {
+                Utils.productTypes.find {
+                    (it as AnyModel.ProductType).name == listAdapter.getItem(position)
+                }
+            }
+            Utils.ObjectModelType._PACKAGE -> {
+                Utils.packages.find {
+                    (it as AnyModel.PackageModel).name == listAdapter.getItem(position)
+                }
+            }
+            else -> null
         }
     }
 

@@ -133,7 +133,18 @@ class AcceptanceRepository() {
             val storeName = acceptJson.getString(STORE_NAME_KEY)
             val representativeName = acceptJson.getString(REPRESENTATIVE_NAME_KEY)
             val batchGuid = acceptJson.getString(BATCH_GUID_KEY)
-            return Acceptance(ref = ref,
+            val z = acceptJson.getBoolean(Z_KEY)
+            val brand = acceptJson.getBoolean(BRAND_KEY)
+            val glass = acceptJson.getBoolean(GLASS_KEY)
+            val expensive = acceptJson.getBoolean(EXPENSIVE_KEY)
+            val notTurnOver = acceptJson.getBoolean(NOT_TURN_OVER_KEY)
+            return Acceptance(
+                z = z,
+                brand = brand,
+                glass = glass,
+                expensive = expensive,
+                notTurnOver = notTurnOver,
+                ref = ref,
                 countPackage = countPackage,
                 storeAddressName = storeAddressName,
                 productTypeName = productTypeName,
@@ -153,14 +164,17 @@ class AcceptanceRepository() {
 //                allWeight = allWeight,
                 client = client,
                 zoneUid = zoneUid,
-                representativeName = representativeName)
+                representativeName = representativeName
+            )
         }
         val weight = acceptJson.getBoolean(WEIGHT_KEY)
         val capacity = acceptJson.getBoolean(CAPACITY_KEY)
-        return Acceptance(number = number,
+        return Acceptance(
+            number = number,
             client = client,
             weight = weight,
-            capacity = capacity)
+            capacity = capacity
+        )
     }
 
     private fun getZoneNameFromUid(zoneUid: String): String {
@@ -211,6 +225,11 @@ class AcceptanceRepository() {
         private const val STORE_NAME_KEY = "НаименованиеМагазина"
         private const val REPRESENTATIVE_NAME_KEY = "ИмяПредставителя"
         private const val BATCH_GUID_KEY = "GUIDПартии"
+        private const val Z_KEY = "ZТовар"
+        private const val BRAND_KEY = "Брэнд"
+        private const val GLASS_KEY = "Стекло"
+        private const val EXPENSIVE_KEY = "Дорогой"
+        private const val NOT_TURN_OVER_KEY = "НеКантовать"
     }
 
 }

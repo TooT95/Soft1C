@@ -1,10 +1,9 @@
 package com.example.soft1c.fragment
 
-import android.content.Context
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
-import android.view.inputmethod.InputMethodManager
+import android.widget.CheckBox
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -21,33 +20,56 @@ import com.google.android.material.textfield.TextInputEditText
 class AcceptanceFragment :
     BaseFragment<FragmentAcceptanceBinding>(FragmentAcceptanceBinding::inflate) {
 
-    private var acceptanceNumber = ""
     private var clientFound = false
     private lateinit var client: Client
-    private lateinit var zone: AnyModel.Zone
+    private lateinit var acceptance: Acceptance
     private val viewModel: AcceptanceViewModel by viewModels()
 //    private val codeClientDelay = 300L
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        acceptanceNumber = arguments?.getString(KEY_ACCEPTANCE_NUMBER, "") ?: ""
-        if (acceptanceNumber.isNotEmpty()) {
+        val acceptanceNumber = arguments?.getString(KEY_ACCEPTANCE_NUMBER, "") ?: ""
+        acceptance = if (acceptanceNumber.isNotEmpty()) {
             viewModel.getAcceptance(acceptanceNumber)
-        }
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if (Utils.zone != null) {
-            zone = Utils.zone as AnyModel.Zone
-            binding.txtZone.text = zone.name
+            Acceptance(number = acceptanceNumber)
+        } else {
+            Acceptance(number = "")
         }
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        initModels()
         initUI()
         observeViewModels()
+    }
+
+    private fun initModels() {
+        Utils.anyModel?.let {
+            when (it) {
+                is AnyModel.Zone -> {
+                    acceptance.zone = it.name
+                    acceptance.zoneUid = it.ref
+                    binding.etxtCardNumber.requestFocus()
+                }
+                is AnyModel.AddressModel -> {
+                    acceptance.storeAddressName = it.name
+                    acceptance.storeUid = it.ref
+                    binding.etxtStoreNumber.requestFocus()
+                }
+                is AnyModel.ProductType -> {
+                    acceptance.productTypeName = it.name
+                    acceptance.productType = it.ref
+                    binding.etxtSeatsNumberCopy.requestFocus()
+                }
+                is AnyModel.PackageModel -> {
+                    acceptance._package = it.name
+                    acceptance.packageUid = it.ref
+                    binding.etxtCountInPackage.requestFocus()
+                }
+            }
+            Utils.anyModel = null
+        }
     }
 
     private fun observeViewModels() {
@@ -60,19 +82,26 @@ class AcceptanceFragment :
         enableFieldsAfterFieldClient(true)
         closeDialogLoading()
         client = it
+        clientFound = true
+        navigateSearchModel(Utils.ObjectModelType.ZONE)
+    }
+
+    private fun navigateSearchModel(model: Int) {
+        if (!clientFound) return
         findNavController().navigate(R.id.action_acceptanceFragment_to_searchFragment,
             Bundle().apply {
-                putInt(SearchFragment.KEY_MODEL, Utils.ObjectModelType.ZONE)
+                putInt(SearchFragment.KEY_MODEL, model)
             })
     }
 
     private fun initUI() {
-        if (acceptanceNumber.isNotEmpty())
+        if (acceptance.number.isNotEmpty() && !clientFound)
             showPbLoading(true)
-        else {
+        else if (acceptance.number.isEmpty()) {
             enableFieldsAfterFieldClient(false)
             setInitFocuses()
         }
+        showAcceptance()
         with(binding) {
             includeToolbar.toolbar.title = resources.getString(R.string.text_title_acceptance)
             includeToolbar.toolbar.setNavigationOnClickListener {
@@ -86,6 +115,56 @@ class AcceptanceFragment :
                 closeActivity()
             }
             etxtCodeClient.setOnKeyListener(::customSetOnKeyListener)
+            etxtCardNumber.setOnKeyListener(::customSetOnKeyListener)
+            etxtStorePhone.setOnKeyListener(::customSetOnKeyListener)
+            etxtSeatsNumberCopy.setOnKeyListener(::customSetOnKeyListener)
+            etxtPackageCount.setOnKeyListener(::customSetOnKeyListener)
+            txtZone.setOnClickListener {
+                navigateSearchModel(Utils.ObjectModelType.ZONE)
+            }
+            ivChooseZone.setOnClickListener {
+                navigateSearchModel(Utils.ObjectModelType.ZONE)
+            }
+            linearStoreAddress.setOnClickListener {
+                navigateSearchModel(Utils.ObjectModelType.ADDRESS)
+            }
+            linearProductType.setOnClickListener {
+                navigateSearchModel(Utils.ObjectModelType.PRODUCT_TYPE)
+            }
+            etxtCodeClient.setOnFocusChangeListener(::etxtFocusChangeListener)
+            etxtStoreNumber.setOnFocusChangeListener(::etxtFocusChangeListener)
+            etxtCardNumber.setOnFocusChangeListener(::etxtFocusChangeListener)
+            etxtAutoNumber.setOnFocusChangeListener(::etxtFocusChangeListener)
+            etxtRepresentative.setOnFocusChangeListener(::etxtFocusChangeListener)
+            etxtCountInPackage.setOnFocusChangeListener(::etxtFocusChangeListener)
+            etxtPackageCount.setOnFocusChangeListener(::etxtFocusChangeListener)
+            etxtSeatsNumberCopy.setOnFocusChangeListener(::etxtFocusChangeListener)
+            etxtStorePhone.setOnFocusChangeListener(::etxtFocusChangeListener)
+
+            chbZ.setOnClickListener(::setCheckResult)
+        }
+    }
+
+    private fun setCheckResult(view: View) {
+        view as CheckBox
+        with(binding) {
+            when (view) {
+                chbZ -> {
+                    acceptance.z = chbZ.isChecked
+                }
+                chbExclamation -> {
+                    acceptance.glass = chbExclamation.isChecked
+                }
+                chbCurrency -> {
+                    acceptance.expensive = chbCurrency.isChecked
+                }
+                chbArrow -> {
+                    acceptance.notTurnOver = chbArrow.isChecked
+                }
+                chbBrand -> {
+                    acceptance.brand = chbBrand.isChecked
+                }
+            }
         }
     }
 
@@ -101,6 +180,22 @@ class AcceptanceFragment :
                     etxtCodeClient -> {
                         showDialogLoading()
                         viewModel.getClient(etxtView.text.toString())
+                        return true
+                    }
+                    etxtCardNumber -> {
+                        navigateSearchModel(Utils.ObjectModelType.ADDRESS)
+                        return true
+                    }
+                    etxtStorePhone -> {
+                        navigateSearchModel(Utils.ObjectModelType.PRODUCT_TYPE)
+                        return true
+                    }
+                    etxtSeatsNumberCopy -> {
+                        etxtPackageCount.requestFocus()
+                        return true
+                    }
+                    etxtPackageCount -> {
+                        navigateSearchModel(Utils.ObjectModelType._PACKAGE)
                         return true
                     }
                     else -> {
@@ -146,32 +241,43 @@ class AcceptanceFragment :
     }
 
     private fun showDetails(acc: Acceptance) {
-        if (acc.ref.isEmpty()) {
+        acceptance = acc
+        if (this.acceptance.ref.isEmpty()) {
             binding.pbLoading.isVisible = false
             return
         }
-
-        with(binding) {
-            etxtAutoNumber.setText(acc.autoNumber)
-            setCheckEmptyText(txtZone, acc.zone)
-            etxtCardNumber.setText(acc.idCard)
-            etxtCodeClient.setText(acc.client)
-            etxtSeatsNumber.setText(acc.countSeat.toString())
-            etxtDocumentNumber.setText(acc.number)
-            setCheckEmptyText(txtStoreAddress, acc.storeAddressName)
-            etxtStoreNumber.setText(acc.storeName)
-            etxtRepresentative.setText(acc.representativeName)
-            etxtStorePhone.setText(acc.phoneNumber)
-            setCheckEmptyText(txtProductType, acc.productTypeName)
-            setCheckEmptyText(txtPackage, acc._package)
-            etxtSeatsNumberCopy.setText(acc.countSeat.toString())
-            etxtPackageCount.setText(acc.countPackage.toString())
-            etxtCountInPackage.setText(acc.countInPackage.toString())
-            etxtDocumentNumberCopy.setText(acc.number)
-        }
+        clientFound = true
+        showAcceptance()
         setInitFocuses()
         showPbLoading(false)
     }
+
+    private fun showAcceptance() {
+        with(binding) {
+            etxtAutoNumber.setText(acceptance.autoNumber)
+            setCheckEmptyText(txtZone, acceptance.zone)
+            etxtCardNumber.setText(acceptance.idCard)
+            etxtCodeClient.setText(acceptance.client)
+            etxtSeatsNumber.setText(acceptance.countSeat.toString())
+            etxtDocumentNumber.setText(acceptance.number)
+            setCheckEmptyText(txtStoreAddress, acceptance.storeAddressName)
+            etxtStoreNumber.setText(acceptance.storeName)
+            etxtRepresentative.setText(acceptance.representativeName)
+            etxtStorePhone.setText(acceptance.phoneNumber)
+            setCheckEmptyText(txtProductType, acceptance.productTypeName)
+            setCheckEmptyText(txtPackage, acceptance._package)
+            etxtSeatsNumberCopy.setText(acceptance.countSeat.toString())
+            etxtPackageCount.setText(acceptance.countPackage.toString())
+            etxtCountInPackage.setText(acceptance.countInPackage.toString())
+            etxtDocumentNumberCopy.setText(acceptance.number)
+            chbExclamation.isChecked = acceptance.glass
+            chbCurrency.isChecked = acceptance.expensive
+            chbArrow.isChecked = acceptance.notTurnOver
+            chbBrand.isChecked = acceptance.brand
+            chbZ.isChecked = acceptance.z
+        }
+    }
+
 
     private fun setInitFocuses() {
         with(binding) {
@@ -180,22 +286,17 @@ class AcceptanceFragment :
                 val length = text?.length ?: 0
                 if (length > 0) setSelection(length)
             }
-//            etxtCodeClient.setOnFocusChangeListener(::etxtFocusChangeListener)
         }
     }
 
-//    private fun etxtFocusChangeListener(view: View, hasFocus: Boolean) {
-//        if (hasFocus) {
-//            view.postDelayed({
-//                activity?.let {
-//                    val imm =
-//                        it.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-//                    imm.showSoftInput(view.findFocus(), 0)
-//                }
-//            }, codeClientEmit)
-//
-//        }
-//    }
+    private fun etxtFocusChangeListener(view: View, hasFocus: Boolean) {
+        if (hasFocus) {
+            view as TextInputEditText
+            view.text?.let {
+                view.setSelection(it.length)
+            }
+        }
+    }
 
     private fun setCheckEmptyText(textV: TextView, text: String) {
         if (text.isNotEmpty()) {
