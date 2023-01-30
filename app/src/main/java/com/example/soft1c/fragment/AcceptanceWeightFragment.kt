@@ -1,6 +1,7 @@
 package com.example.soft1c.fragment
 
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
 import android.widget.TextView
 import androidx.core.view.isVisible
@@ -10,6 +11,7 @@ import com.example.soft1c.Utils
 import com.example.soft1c.databinding.FragmentAcceptanceWeightBinding
 import com.example.soft1c.model.Acceptance
 import com.example.soft1c.viewmodel.AcceptanceViewModel
+import com.google.android.material.textfield.TextInputEditText
 
 class AcceptanceWeightFragment :
     BaseFragment<FragmentAcceptanceWeightBinding>(FragmentAcceptanceWeightBinding::inflate) {
@@ -70,7 +72,30 @@ class AcceptanceWeightFragment :
             btnSaveCopy.setOnClickListener {
                 createUpdateAcceptance()
             }
+            etxtWeight.setOnKeyListener(::customSetOnKeyListener)
         }
+    }
+
+    private fun customSetOnKeyListener(view: View, key: Int, keyEvent: KeyEvent): Boolean {
+        if (key == 66 && keyEvent.action == KeyEvent.ACTION_UP) {
+            with(binding) {
+                val etxtView = view as TextInputEditText
+                if (etxtView.text!!.isEmpty()) {
+                    etxtView.error = resources.getString(R.string.text_field_is_empyt)
+                    return true
+                }
+                when (etxtView) {
+                    etxtWeight -> {
+                        btnSaveCopy.requestFocus()
+                        return true
+                    }
+                    else -> {
+                        return false
+                    }
+                }
+            }
+        }
+        return false
     }
 
     private fun createUpdateAcceptance() {

@@ -126,6 +126,8 @@ class AcceptanceFragment :
             etxtStorePhone.setOnKeyListener(::customSetOnKeyListener)
             etxtSeatsNumberCopy.setOnKeyListener(::customSetOnKeyListener)
             etxtPackageCount.setOnKeyListener(::customSetOnKeyListener)
+            etxtCountInPackage.setOnKeyListener(::customSetOnKeyListener)
+
             txtZone.setOnClickListener {
                 navigateSearchModel(Utils.ObjectModelType.ZONE)
             }
@@ -137,6 +139,9 @@ class AcceptanceFragment :
             }
             linearProductType.setOnClickListener {
                 navigateSearchModel(Utils.ObjectModelType.PRODUCT_TYPE)
+            }
+            linearPackage.setOnClickListener {
+                navigateSearchModel(Utils.ObjectModelType._PACKAGE)
             }
             etxtCodeClient.setOnFocusChangeListener(::etxtFocusChangeListener)
             etxtStoreNumber.setOnFocusChangeListener(::etxtFocusChangeListener)
@@ -235,6 +240,10 @@ class AcceptanceFragment :
                     }
                     etxtPackageCount -> {
                         navigateSearchModel(Utils.ObjectModelType._PACKAGE)
+                        return true
+                    }
+                    etxtCountInPackage -> {
+                        btnSaveCopy.requestFocus()
                         return true
                     }
                     else -> {
