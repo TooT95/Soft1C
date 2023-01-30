@@ -28,7 +28,7 @@
     <string name="text_number_of_auto">Number of auto</string>
     <string name="text_number">Number</string>
     <string name="text_exclamation">!!!</string>
-    <string name="text_currency">$$</string>
+    <string name="text_currency">$</string>
     <string name="text_arrow">↑↑</string>
     <string name="text_brand">Brand</string>
     <string name="text_z">Z</string>
@@ -47,6 +47,9 @@
 
     <string name="text_address">address</string>
     <string name="text_element_not_found">Element not found</string>
+    <string name="text_m3">m3</string>
+    <string name="text_price_title">Price for m3:</string>
+    <string name="text_zero">0</string>
 
     <array name="protocols">
         <item>http</item>

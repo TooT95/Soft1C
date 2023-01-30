@@ -27,7 +27,7 @@
     <string name="text_zone">Зона</string>
     <string name="text_number_of_auto">№ авто</string>
     <string name="text_number">Номер</string>
-    <string name="text_currency">$$</string>
+    <string name="text_currency">$</string>
     <string name="text_exclamation">!!!</string>
     <string name="text_arrow">↑↑</string>
     <string name="text_z">Z</string>
@@ -47,4 +47,6 @@
     <string name="text_downloading_text">Загрузка %s…</string>
     <string name="text_address">адрес</string>
     <string name="text_element_not_found">Элемент не найден</string>
+    <string name="text_m3">м3</string>
+    <string name="text_price_title">Цена за куб:</string>
 </resources>
