@@ -8,10 +8,11 @@
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/elayout_text"
         android:layout_width="match_parent"
+        style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
         android:layout_height="wrap_content">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/etxt_text"
+        <AutoCompleteTextView
+            android:id="@+id/etxt_correct"
             style="@style/TextInputDefault"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -62,11 +63,11 @@
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etxt_number"
-            android:inputType="numberDecimal"
             style="@style/TextInputDefault"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/app_name" />
+            android:hint="@string/app_name"
+            android:inputType="numberDecimal" />
 
     </com.google.android.material.textfield.TextInputLayout>
 

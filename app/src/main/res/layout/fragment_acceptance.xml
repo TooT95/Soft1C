@@ -113,26 +113,23 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/lienar_code_seats">
 
-                <TextView
-                    android:id="@+id/txt_zone"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_weight="10"
-                    android:background="@drawable/rectangle"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/default_margin"
-                    android:text="@string/text_zone"
-                    android:textSize="16sp"
-                    tools:ignore="NestedWeights" />
-
-                <ImageView
-                    android:id="@+id/iv_choose_zone"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/elayout_zone"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="2"
-                    android:contentDescription="@string/app_name"
-                    android:src="@drawable/ic_choose_elem" />
+                    android:layout_weight="8">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/etxt_zone"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:backgroundTint="@color/white"
+                        android:hint="@string/text_zone"
+                        android:inputType="textAutoCorrect" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/elayout_auto_number"
@@ -252,38 +249,26 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/linear_store_address"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/elayout_store_address"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_margin_chb"
-                android:orientation="horizontal"
-                android:weightSum="20"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/linear_chb">
 
-                <TextView
-                    android:id="@+id/txt_store_address"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/default_margin"
-                    android:layout_weight="18"
-                    android:background="@drawable/rectangle"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/default_margin"
-                    android:text="@string/text_store_address"
-                    android:textSize="16sp" />
-
-                <ImageView
-                    android:id="@+id/iv_choose_store_adress"
-                    android:layout_width="0dp"
+                <AutoCompleteTextView
+                    android:id="@+id/etxt_store_address"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="2"
-                    android:contentDescription="@string/app_name"
-                    android:src="@drawable/ic_choose_elem" />
+                    android:backgroundTint="@color/white"
+                    android:hint="@string/text_address"
+                    android:inputType="textAutoCorrect" />
 
-            </LinearLayout>
+            </com.google.android.material.textfield.TextInputLayout>
+
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/elayout_store_number"
@@ -292,7 +277,7 @@
                 android:layout_marginTop="@dimen/default_margin_chb"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/linear_store_address">
+                app:layout_constraintTop_toBottomOf="@id/elayout_store_address">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etxt_store_number"
@@ -342,38 +327,45 @@
 
             </com.google.android.material.textfield.TextInputLayout>
 
-            <LinearLayout
-                android:id="@+id/linear_product_type"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/elayout_product_type"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/default_margin_chb"
-                android:orientation="horizontal"
-                android:weightSum="20"
+                app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/elayout_store_phone">
 
-                <TextView
-                    android:id="@+id/txt_product_type"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/default_margin"
-                    android:layout_weight="18"
-                    android:background="@drawable/rectangle"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/default_margin"
-                    android:text="@string/text_product_type"
-                    android:textSize="16sp" />
-
-                <ImageView
-                    android:id="@+id/iv_choose_product_type"
-                    android:layout_width="0dp"
+                <AutoCompleteTextView
+                    android:id="@+id/etxt_product_type"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="2"
-                    android:contentDescription="@string/app_name"
-                    android:src="@drawable/ic_choose_elem" />
+                    android:backgroundTint="@color/white"
+                    android:hint="@string/text_product_type"
+                    android:inputType="textAutoCorrect" />
 
-            </LinearLayout>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/elayout_package"
+                style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox.ExposedDropdownMenu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin_chb"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/elayout_product_type">
+
+                <AutoCompleteTextView
+                    android:id="@+id/etxt_package"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:backgroundTint="@color/white"
+                    android:hint="@string/text_package"
+                    android:inputType="textAutoCorrect" />
+
+            </com.google.android.material.textfield.TextInputLayout>
 
             <LinearLayout
                 android:id="@+id/lienar_package_seats"
@@ -383,7 +375,7 @@
                 android:baselineAligned="false"
                 android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/linear_product_type">
+                app:layout_constraintTop_toBottomOf="@id/elayout_package">
 
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/elayout_seats_number_copy"
@@ -420,39 +412,6 @@
 
             </LinearLayout>
 
-            <LinearLayout
-                android:id="@+id/linear_package"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/default_margin_chb"
-                android:orientation="horizontal"
-                android:weightSum="20"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/lienar_package_seats">
-
-                <TextView
-                    android:id="@+id/txt_package"
-                    android:layout_width="0dp"
-                    android:layout_height="match_parent"
-                    android:layout_marginStart="@dimen/default_margin"
-                    android:layout_weight="18"
-                    android:background="@drawable/rectangle"
-                    android:gravity="center_vertical"
-                    android:paddingLeft="@dimen/default_margin"
-                    android:text="@string/text_package"
-                    android:textSize="16sp" />
-
-                <ImageView
-                    android:id="@+id/iv_choose_package"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="2"
-                    android:contentDescription="@string/app_name"
-                    android:src="@drawable/ic_choose_elem" />
-
-            </LinearLayout>
-
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/elayout_count_in_package"
                 android:layout_width="match_parent"
@@ -460,7 +419,7 @@
                 android:layout_marginTop="@dimen/default_margin"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/linear_package">
+                app:layout_constraintTop_toBottomOf="@id/lienar_package_seats">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etxt_count_in_package"

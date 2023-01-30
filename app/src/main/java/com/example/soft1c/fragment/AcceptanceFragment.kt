@@ -3,11 +3,12 @@ package com.example.soft1c.fragment
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.AutoCompleteTextView
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
-import androidx.navigation.fragment.findNavController
 import com.example.soft1c.R
 import com.example.soft1c.Utils
 import com.example.soft1c.databinding.FragmentAcceptanceBinding
@@ -37,37 +38,8 @@ class AcceptanceFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initModels()
         initUI()
         observeViewModels()
-    }
-
-    private fun initModels() {
-        Utils.anyModel?.let {
-            when (it) {
-                is AnyModel.Zone -> {
-                    acceptance.zone = it.name
-                    acceptance.zoneUid = it.ref
-                    binding.etxtCardNumber.requestFocus()
-                }
-                is AnyModel.AddressModel -> {
-                    acceptance.storeAddressName = it.name
-                    acceptance.storeUid = it.ref
-                    binding.etxtStoreNumber.requestFocus()
-                }
-                is AnyModel.ProductType -> {
-                    acceptance.productTypeName = it.name
-                    acceptance.productType = it.ref
-                    binding.etxtSeatsNumberCopy.requestFocus()
-                }
-                is AnyModel.PackageModel -> {
-                    acceptance._package = it.name
-                    acceptance.packageUid = it.ref
-                    binding.etxtCountInPackage.requestFocus()
-                }
-            }
-            Utils.anyModel = null
-        }
     }
 
     private fun observeViewModels() {
@@ -90,15 +62,9 @@ class AcceptanceFragment :
         acceptance.client = pair.first.code
         setInitFocuses()
         showAcceptance()
-        navigateSearchModel(Utils.ObjectModelType.ZONE)
-    }
-
-    private fun navigateSearchModel(model: Int) {
-        if (!clientFound) return
-        findNavController().navigate(R.id.action_acceptanceFragment_to_searchFragment,
-            Bundle().apply {
-                putInt(SearchFragment.KEY_MODEL, model)
-            })
+        if (clientFound) {
+            binding.etxtZone.requestFocus()
+        }
     }
 
     private fun initUI() {
@@ -128,21 +94,30 @@ class AcceptanceFragment :
             etxtPackageCount.setOnKeyListener(::customSetOnKeyListener)
             etxtCountInPackage.setOnKeyListener(::customSetOnKeyListener)
 
-            txtZone.setOnClickListener {
-                navigateSearchModel(Utils.ObjectModelType.ZONE)
-            }
-            ivChooseZone.setOnClickListener {
-                navigateSearchModel(Utils.ObjectModelType.ZONE)
-            }
-            linearStoreAddress.setOnClickListener {
-                navigateSearchModel(Utils.ObjectModelType.ADDRESS)
-            }
-            linearProductType.setOnClickListener {
-                navigateSearchModel(Utils.ObjectModelType.PRODUCT_TYPE)
-            }
-            linearPackage.setOnClickListener {
-                navigateSearchModel(Utils.ObjectModelType._PACKAGE)
-            }
+            etxtZone.setAdapter(ArrayAdapter(requireContext(),
+                android.R.layout.simple_list_item_1, Utils.zones.map {
+                    (it as AnyModel.Zone).name
+                }))
+            etxtZone.setOnKeyListener(::autoCompleteOnKeyListener)
+
+            etxtStoreAddress.setAdapter(ArrayAdapter(requireContext(),
+                android.R.layout.simple_list_item_1, Utils.addressess.map {
+                    (it as AnyModel.AddressModel).name
+                }))
+            etxtStoreAddress.setOnKeyListener(::autoCompleteOnKeyListener)
+
+            etxtProductType.setAdapter(ArrayAdapter(requireContext(),
+                android.R.layout.simple_list_item_1, Utils.productTypes.map {
+                    (it as AnyModel.ProductType).name
+                }))
+            etxtProductType.setOnKeyListener(::autoCompleteOnKeyListener)
+
+            etxtPackage.setAdapter(ArrayAdapter(requireContext(),
+                android.R.layout.simple_list_item_1, Utils.packages.map {
+                    (it as AnyModel.PackageModel).name
+                }))
+            etxtPackage.setOnKeyListener(::autoCompleteOnKeyListener)
+
             etxtCodeClient.setOnFocusChangeListener(::etxtFocusChangeListener)
             etxtStoreNumber.setOnFocusChangeListener(::etxtFocusChangeListener)
             etxtCardNumber.setOnFocusChangeListener(::etxtFocusChangeListener)
@@ -152,6 +127,7 @@ class AcceptanceFragment :
             etxtPackageCount.setOnFocusChangeListener(::etxtFocusChangeListener)
             etxtSeatsNumberCopy.setOnFocusChangeListener(::etxtFocusChangeListener)
             etxtStorePhone.setOnFocusChangeListener(::etxtFocusChangeListener)
+            etxtZone.setOnFocusChangeListener(::etxtAutoCompleteFocusChangeListener)
 
             chbZ.setOnClickListener(::setCheckResult)
             chbExclamation.setOnClickListener(::setCheckResult)
@@ -212,6 +188,80 @@ class AcceptanceFragment :
         }
     }
 
+    private fun autoCompleteOnKeyListener(view: View, key: Int, keyEvent: KeyEvent): Boolean {
+        if (key == 66 && keyEvent.action == KeyEvent.ACTION_UP) {
+            view as AutoCompleteTextView
+            with(binding) {
+                when (view) {
+                    etxtZone -> {
+                        val element = Utils.zones.find {
+                            (it as AnyModel.Zone).name == view.text.toString()
+                        }
+                        if (element == null) {
+                            view.requestFocus()
+                            return false
+                        }
+                        element as AnyModel.Zone
+                        acceptance.zone = element.name
+                        acceptance.zoneUid = element.ref
+                        etxtCardNumber.requestFocus()
+                        return true
+                    }
+                    etxtStoreAddress -> {
+                        if (view.adapter.count == 0) {
+                            view.requestFocus()
+                            return false
+                        }
+                        val textElement = view.adapter.getItem(0)
+                        val element = Utils.addressess.find {
+                            (it as AnyModel.AddressModel).name == textElement
+                        }
+                        element as AnyModel.AddressModel
+                        acceptance.storeAddressName = element.name
+                        acceptance.storeUid = element.ref
+                        view.setText(element.name)
+                        etxtStoreNumber.requestFocus()
+                        return true
+                    }
+                    etxtProductType -> {
+                        if (view.adapter.count == 0) {
+                            view.requestFocus()
+                            return false
+                        }
+                        val textElement = view.adapter.getItem(0)
+                        val element = Utils.productTypes.find {
+                            (it as AnyModel.ProductType).name == textElement
+                        }
+                        element as AnyModel.ProductType
+                        acceptance.productTypeName = element.name
+                        acceptance.productType = element.ref
+                        view.setText(element.name)
+                        etxtPackage.requestFocus()
+                        return true
+                    }
+                    etxtPackage -> {
+                        if (view.adapter.count == 0) {
+                            view.requestFocus()
+                            return false
+                        }
+                        val textElement = view.adapter.getItem(0)
+                        val element = Utils.packages.find {
+                            (it as AnyModel.PackageModel).name == textElement
+                        }
+                        element as AnyModel.PackageModel
+                        acceptance._package = element.name
+                        acceptance.packageUid = element.ref
+                        view.setText(element.name)
+                        etxtSeatsNumberCopy.requestFocus()
+                        return true
+                    }
+                    else -> return false
+                }
+            }
+        }
+        return false
+    }
+
     private fun customSetOnKeyListener(view: View, key: Int, keyEvent: KeyEvent): Boolean {
         if (key == 66 && keyEvent.action == KeyEvent.ACTION_UP) {
             with(binding) {
@@ -227,11 +277,11 @@ class AcceptanceFragment :
                         return true
                     }
                     etxtCardNumber -> {
-                        navigateSearchModel(Utils.ObjectModelType.ADDRESS)
+                        etxtStoreAddress.requestFocus()
                         return true
                     }
                     etxtStorePhone -> {
-                        navigateSearchModel(Utils.ObjectModelType.PRODUCT_TYPE)
+                        etxtProductType.requestFocus()
                         return true
                     }
                     etxtSeatsNumberCopy -> {
@@ -239,7 +289,7 @@ class AcceptanceFragment :
                         return true
                     }
                     etxtPackageCount -> {
-                        navigateSearchModel(Utils.ObjectModelType._PACKAGE)
+                        etxtCountInPackage.requestFocus()
                         return true
                     }
                     etxtCountInPackage -> {
@@ -302,17 +352,17 @@ class AcceptanceFragment :
     private fun showAcceptance() {
         with(binding) {
             etxtAutoNumber.setText(acceptance.autoNumber)
-            setCheckEmptyText(txtZone, acceptance.zone)
+            etxtZone.setText(acceptance.zone)
             etxtCardNumber.setText(acceptance.idCard)
             etxtCodeClient.setText(acceptance.client)
             etxtSeatsNumber.setText(acceptance.countSeat.toString())
             etxtDocumentNumber.setText(acceptance.number)
-            setCheckEmptyText(txtStoreAddress, acceptance.storeAddressName)
+            etxtStoreAddress.setText(acceptance.storeAddressName)
             etxtStoreNumber.setText(acceptance.storeName)
             etxtRepresentative.setText(acceptance.representativeName)
             etxtStorePhone.setText(acceptance.phoneNumber)
-            setCheckEmptyText(txtProductType, acceptance.productTypeName)
-            setCheckEmptyText(txtPackage, acceptance._package)
+            etxtProductType.setText(acceptance.productTypeName)
+            etxtPackage.setText(acceptance._package)
             etxtSeatsNumberCopy.setText(acceptance.countSeat.toString())
             etxtPackageCount.setText(acceptance.countPackage.toString())
             etxtCountInPackage.setText(acceptance.countInPackage.toString())
@@ -346,9 +396,12 @@ class AcceptanceFragment :
         }
     }
 
-    private fun setCheckEmptyText(textV: TextView, text: String) {
-        if (text.isNotEmpty()) {
-            textV.text = text
+    private fun etxtAutoCompleteFocusChangeListener(view: View, hasFocus: Boolean) {
+        if (hasFocus) {
+            view as AutoCompleteTextView
+            view.text?.let {
+                view.setSelection(it.length)
+            }
         }
     }
 

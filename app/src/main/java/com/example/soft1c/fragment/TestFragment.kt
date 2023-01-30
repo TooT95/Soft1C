@@ -5,6 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.ArrayAdapter
 import com.google.zxing.integration.android.IntentIntegrator
 import androidx.navigation.fragment.findNavController
 import com.example.soft1c.R
@@ -49,40 +50,17 @@ class TestFragment : BaseFragment<FragmentTestBinding>(FragmentTestBinding::infl
                 }
             }
 
-            etxtText.setOnKeyListener { view, key, keyEvent ->
-                if (key == 66) {
-                    if (etxtText.text!!.isEmpty()) {
-                        etxtText.error = resources.getString(R.string.text_field_is_empyt)
-                        return@setOnKeyListener true
-                    } else {
-                        etxtText.error = null
-                        openForSearch()
-                        return@setOnKeyListener true
-                    }
-                }
-                Timber.d("etxtText: $view , $key , $keyEvent")
-                return@setOnKeyListener false
-            }
-            etxtNumber.setOnKeyListener { view, key, keyEvent ->
-                if (key == 66) {
-                    if (etxtText.text!!.isEmpty()) {
-                        etxtText.error = resources.getString(R.string.text_field_is_empyt)
-                        return@setOnKeyListener true
-                    } else {
-                        etxtText.error = null
-                        submitClicked()
-                        return@setOnKeyListener true
-                    }
-                }
-                Timber.d("etxtText: $view , $key , $keyEvent")
-                return@setOnKeyListener false
-            }
             cardFind.setOnClickListener {
                 openForSearch()
             }
             btnSubmit.setOnClickListener {
                 submitClicked()
             }
+
+            val listOfs = listOf("Python", "Java", "C#", "Javascript")
+            val adapter =
+                ArrayAdapter(requireContext(), android.R.layout.simple_list_item_1, listOfs)
+            etxtCorrect.setAdapter(adapter)
         }
     }
 

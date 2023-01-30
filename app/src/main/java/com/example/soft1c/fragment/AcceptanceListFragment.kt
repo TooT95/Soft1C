@@ -129,7 +129,9 @@ class AcceptanceListFragment :
         requiredTypes -= 1
         when (pairOf.first) {
             Utils.ObjectModelType.ADDRESS -> {
-                Utils.addressess = pairOf.second
+                Utils.addressess = pairOf.second.sortedBy {
+                    (it as AnyModel.AddressModel).name
+                }
                 setTextDialogLoading(resources.getString(R.string.text_package))
                 baseViewModel.downloadType(Utils.ObjectModelType._PACKAGE)
             }
