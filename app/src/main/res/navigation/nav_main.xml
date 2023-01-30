@@ -40,15 +40,23 @@
         <action
             android:id="@+id/action_acceptanceFragment_to_acceptanceFragment"
             app:destination="@id/acceptanceFragment" />
+        <action
+            android:id="@+id/action_acceptanceListFragment_to_acceptanceWeightFragment"
+            app:destination="@id/acceptanceWeightFragment" />
     </fragment>
 
     <fragment
         android:id="@+id/acceptanceFragment"
         android:name="com.example.soft1c.fragment.AcceptanceFragment"
         android:label="AcceptanceFragment"
-        tools:layout="@layout/fragment_acceptance" >
+        tools:layout="@layout/fragment_acceptance">
         <action
             android:id="@+id/action_acceptanceFragment_to_searchFragment"
             app:destination="@id/searchFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/acceptanceWeightFragment"
+        android:name="com.example.soft1c.fragment.AcceptanceWeightFragment"
+        android:label="AcceptanceWeightFragment"
+        tools:layout="@layout/fragment_acceptance_weight" />
 </navigation>

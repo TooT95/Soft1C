@@ -99,7 +99,8 @@ class AcceptanceListFragment :
             chbSize.setOnClickListener(chbListener)
 
             ivAdd.setOnClickListener {
-                openAcceptanceDetail(Bundle())
+                if (chbAcceptance.isChecked)
+                    openAcceptanceDetail(Bundle())
             }
             etxtDocumentNumber.setOnKeyListener(::findOpenDocumentByNumber)
             chbAcceptance.isChecked = true
@@ -162,7 +163,15 @@ class AcceptanceListFragment :
     }
 
     private fun openAcceptanceDetail(bundle: Bundle) {
-        findNavController().navigate(R.id.action_acceptanceFragment_to_acceptanceFragment, bundle)
+        with(binding) {
+            findNavController().navigate(when {
+                chbAcceptance.isChecked -> R.id.action_acceptanceFragment_to_acceptanceFragment
+                chbWeight.isChecked -> R.id.action_acceptanceListFragment_to_acceptanceWeightFragment
+                else -> {
+                    R.id.action_acceptanceFragment_to_acceptanceFragment
+                }
+            }, bundle)
+        }
     }
 
     private fun showPbLoading(show: Boolean) {

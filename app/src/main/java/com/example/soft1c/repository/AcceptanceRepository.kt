@@ -66,7 +66,7 @@ class AcceptanceRepository {
 
     }
 
-    suspend fun getClientApi(clientCode: String): Client {
+    suspend fun getClientApi(clientCode: String): Pair<Client, Boolean> {
         return suspendCoroutine { continuation ->
             Network.api.client(clientCode).enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(
@@ -79,9 +79,9 @@ class AcceptanceRepository {
                         val code = jsonObject.getString(Client.CODE_KEY)
                         val serialDoc = jsonObject.getString(Client.SERAIL_DOC_KEY)
                         val numberDoc = jsonObject.getString(Client.NUMBER_DOC_KEY)
-                        continuation.resume(Client(code, serialDoc, numberDoc))
+                        continuation.resume(Pair(Client(code, serialDoc, numberDoc), true))
                     } else {
-                        continuation.resume(Client())
+                        continuation.resume(Pair(Client(), false))
                     }
                 }
 

@@ -83,11 +83,12 @@ class AcceptanceFragment :
         activity?.onBackPressed()
     }
 
-    private fun clientObserve(it: Client) {
-        enableFieldsAfterFieldClient(true)
+    private fun clientObserve(pair: Pair<Client, Boolean>) {
+        clientFound = pair.second
+        enableFieldsAfterFieldClient(clientFound)
         closeDialogLoading()
-        clientFound = true
-        acceptance.client = it.code
+        acceptance.client = pair.first.code
+        setInitFocuses()
         showAcceptance()
         navigateSearchModel(Utils.ObjectModelType.ZONE)
     }
@@ -169,7 +170,7 @@ class AcceptanceFragment :
             acceptance.idCard = etxtCardNumber.text.toString()
             acceptance.storeName = etxtStoreNumber.text.toString()
             acceptance.representativeName = etxtRepresentative.text.toString()
-            acceptance.phoneNumber = etxtStoreNumber.text.toString()
+            acceptance.phoneNumber = etxtStorePhone.text.toString()
             val seatCount = etxtSeatsNumberCopy.text.toString()
             if (seatCount.isNotEmpty())
                 acceptance.countSeat = seatCount.toInt()
@@ -246,7 +247,6 @@ class AcceptanceFragment :
     }
 
     private fun enableFieldsAfterFieldClient(enable: Boolean) {
-        clientFound = enable
         with(binding) {
             etxtAutoNumber.isEnabled = enable
             etxtCardNumber.isEnabled = enable

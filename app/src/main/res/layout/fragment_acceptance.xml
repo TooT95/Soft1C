@@ -97,7 +97,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/white"
                         android:hint="@string/text_number_of_seats"
-                        android:inputType="numberDecimal" />
+                        android:inputType="number" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -397,7 +397,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/white"
                         android:hint="@string/text_number_of_seats"
-                        android:inputType="numberDecimal" />
+                        android:inputType="number" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -414,7 +414,7 @@
                         android:layout_height="wrap_content"
                         android:backgroundTint="@color/white"
                         android:hint="@string/text_package_count"
-                        android:inputType="numberDecimal" />
+                        android:inputType="number" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
@@ -468,7 +468,7 @@
                     android:layout_height="wrap_content"
                     android:backgroundTint="@color/white"
                     android:hint="@string/text_count_in_package"
-                    android:inputType="numberDecimal" />
+                    android:inputType="number" />
 
             </com.google.android.material.textfield.TextInputLayout>
 
