@@ -162,10 +162,10 @@ class AcceptanceRepository {
         acceptJson: JSONObject,
         hasAdditionalFields: Boolean = false,
     ): Acceptance {
+        val ref = acceptJson.getString(REF_KEY)
         val number = acceptJson.getString(NUMBER_KEY)
         val client = acceptJson.getString(CLIENT_KEY)
         if (hasAdditionalFields) {
-            val ref = acceptJson.getString(REF_KEY)
             val zoneUid = acceptJson.getString(ZONE_KEY)
             val zoneName = getZoneNameFromUid(zoneUid)
             val autoNumber = acceptJson.getString(AUTO_NUMBER_KEY)
@@ -221,6 +221,7 @@ class AcceptanceRepository {
         val weight = acceptJson.getBoolean(WEIGHT_KEY)
         val capacity = acceptJson.getBoolean(CAPACITY_KEY)
         return Acceptance(
+            ref = ref,
             number = number,
             client = client,
             weight = weight,

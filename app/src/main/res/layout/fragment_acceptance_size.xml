@@ -9,7 +9,14 @@
         android:id="@+id/include_toolbar"
         layout="@layout/toolbar_custom" />
 
+    <ProgressBar
+        android:id="@+id/pb_loading"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/container_main"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="@dimen/default_margin">

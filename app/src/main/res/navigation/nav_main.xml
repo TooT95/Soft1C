@@ -43,6 +43,9 @@
         <action
             android:id="@+id/action_acceptanceListFragment_to_acceptanceWeightFragment"
             app:destination="@id/acceptanceWeightFragment" />
+        <action
+            android:id="@+id/action_acceptanceListFragment_to_acceptanceSizeFragment"
+            app:destination="@id/acceptanceSizeFragment" />
     </fragment>
 
     <fragment
@@ -59,4 +62,11 @@
         android:name="com.example.soft1c.fragment.AcceptanceWeightFragment"
         android:label="AcceptanceWeightFragment"
         tools:layout="@layout/fragment_acceptance_weight" />
+
+
+    <fragment
+        android:id="@+id/acceptanceSizeFragment"
+        android:name="com.example.soft1c.fragment.AcceptanceSizeFragment"
+        android:label="AcceptanceSizeFragment"
+        tools:layout="@layout/fragment_acceptance_size" />
 </navigation>

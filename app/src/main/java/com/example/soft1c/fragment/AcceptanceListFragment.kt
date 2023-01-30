@@ -157,6 +157,7 @@ class AcceptanceListFragment :
             ItemClicked.ITEM -> {
                 val args = Bundle().apply {
                     putString(AcceptanceFragment.KEY_ACCEPTANCE_NUMBER, acceptance.number)
+                    putString(AcceptanceSizeFragment.KEY_ACCEPTANCE_GUID, acceptance.ref)
                 }
                 openAcceptanceDetail(args)
             }
@@ -169,6 +170,7 @@ class AcceptanceListFragment :
             findNavController().navigate(when {
                 chbAcceptance.isChecked -> R.id.action_acceptanceFragment_to_acceptanceFragment
                 chbWeight.isChecked -> R.id.action_acceptanceListFragment_to_acceptanceWeightFragment
+                chbSize.isChecked -> R.id.action_acceptanceListFragment_to_acceptanceSizeFragment
                 else -> {
                     R.id.action_acceptanceFragment_to_acceptanceFragment
                 }

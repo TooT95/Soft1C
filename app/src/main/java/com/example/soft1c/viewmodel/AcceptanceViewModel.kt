@@ -8,7 +8,9 @@ import androidx.lifecycle.viewModelScope
 import com.example.soft1c.SingleLiveEvent
 import com.example.soft1c.model.Acceptance
 import com.example.soft1c.model.Client
+import com.example.soft1c.model.SizeAcceptance
 import com.example.soft1c.repository.AcceptanceRepository
+import com.example.soft1c.repository.AcceptanceSizeRepository
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -16,6 +18,7 @@ import kotlinx.coroutines.launch
 class AcceptanceViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository = AcceptanceRepository()
+    private val sizeRepository = AcceptanceSizeRepository()
 
     private val exceptionScope = CoroutineExceptionHandler { coroutineContext, throwable ->
         toastMutableData.postValue("Error on $coroutineContext , error message ${throwable.message}")
@@ -26,6 +29,7 @@ class AcceptanceViewModel(application: Application) : AndroidViewModel(applicati
     private val acceptanceMutableData = SingleLiveEvent<Acceptance>()
     private val clientMutableData = SingleLiveEvent<Pair<Client, Boolean>>()
     private val createUpdateMutableData = SingleLiveEvent<Pair<Acceptance, Boolean>>()
+    private val acceptanceSizeMutableData = SingleLiveEvent<SizeAcceptance>()
 
     val toastLiveData: LiveData<String>
         get() = toastMutableData
@@ -41,6 +45,9 @@ class AcceptanceViewModel(application: Application) : AndroidViewModel(applicati
 
     val createUpdateLiveData: LiveData<Pair<Acceptance, Boolean>>
         get() = createUpdateMutableData
+
+    val acceptanceSizeLiveData: LiveData<SizeAcceptance>
+        get() = acceptanceSizeMutableData
 
     fun getAcceptanceList() {
         viewModelScope.launch((exceptionScope + Dispatchers.IO)) {
@@ -63,6 +70,12 @@ class AcceptanceViewModel(application: Application) : AndroidViewModel(applicati
     fun createUpdateAcceptance(acceptance: Acceptance) {
         viewModelScope.launch((exceptionScope + Dispatchers.IO)) {
             createUpdateMutableData.postValue(repository.createUpdateAccApi(acceptance))
+        }
+    }
+
+    fun getAcceptanceSizeData(acceptanceGuid: String) {
+        viewModelScope.launch((exceptionScope + Dispatchers.IO)) {
+            acceptanceSizeMutableData.postValue(sizeRepository.getSizeDataApi(acceptanceGuid))
         }
     }
 }
