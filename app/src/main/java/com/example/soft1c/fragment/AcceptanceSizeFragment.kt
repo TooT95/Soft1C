@@ -2,15 +2,19 @@ package com.example.soft1c.fragment
 
 import android.annotation.SuppressLint
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.View
+import android.widget.AutoCompleteTextView
 import android.widget.EditText
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soft1c.R
+import com.example.soft1c.Utils
 import com.example.soft1c.adapter.AcceptanceSizeAdapter
 import com.example.soft1c.databinding.FragmentAcceptanceSizeBinding
 import com.example.soft1c.model.Acceptance
+import com.example.soft1c.model.AnyModel
 import com.example.soft1c.model.SizeAcceptance
 import com.example.soft1c.viewmodel.AcceptanceViewModel
 
@@ -23,6 +27,7 @@ class AcceptanceSizeFragment :
     private lateinit var acceptance: Acceptance
     private lateinit var sizeAdapter: AcceptanceSizeAdapter
     private var indexSeatNumber = 0
+    private var hasFocusCanSave = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -81,10 +86,26 @@ class AcceptanceSizeFragment :
                 indexSeatNumber += 1
             }
         }
-        if(acceptanceSize.recordAllowed)
+        if (acceptanceSize.recordAllowed)
             acceptanceSize.recordAllowed = indexSeatNumber != acceptanceSize.dataArray.size
         if (indexSeatNumber == 0) indexSeatNumber = 1
         binding.etxtCurrentIndex.setText(indexSeatNumber.toString())
+    }
+
+    private fun setAutoCompleteFocusListener(view: View, hasFocus: Boolean) {
+        view as AutoCompleteTextView
+        with(binding) {
+            when (view) {
+                etxtSave -> if (hasFocus) {
+                    if (hasFocusCanSave) {
+                        hasFocusCanSave = !hasFocusCanSave
+                        return@with
+                    }
+                    fillList()
+                    etxtLength.requestFocus()
+                }
+            }
+        }
     }
 
     private fun initUI() {
@@ -99,10 +120,21 @@ class AcceptanceSizeFragment :
             rvMain.setHasFixedSize(true)
             rvMain.layoutManager = LinearLayoutManager(requireContext())
 
-            btnOk.setOnClickListener {
-                fillList()
-                etxtLength.requestFocus()
+            etxtChangeColumnsNumber.setOnKeyListener { _, key, keyEvent ->
+                if (key == 66 && keyEvent.action == KeyEvent.ACTION_DOWN) {
+                    hasFocusCanSave = true
+                    etxtSave.requestFocus()
+                    return@setOnKeyListener true
+                }
+                return@setOnKeyListener false
             }
+            etxtSave.setOnKeyListener(::autoCompleteOnKeyListener)
+            etxtSave.setOnFocusChangeListener(::setAutoCompleteFocusListener)
+
+//            btnOk.setOnClickListener {
+//                fillList()
+//                etxtLength.requestFocus()
+//            }
 
             ivSave.setOnClickListener {
                 viewModel.updateAcceptanceSize(acceptanceGuid, acceptanceSize)
@@ -110,6 +142,24 @@ class AcceptanceSizeFragment :
             }
         }
     }
+
+    private fun autoCompleteOnKeyListener(view: View, key: Int, keyEvent: KeyEvent): Boolean {
+        if (key == 66 && keyEvent.action == KeyEvent.ACTION_DOWN) {
+            view as AutoCompleteTextView
+            with(binding) {
+                when (view) {
+                    etxtSave -> {
+                        fillList()
+                        etxtLength.requestFocus()
+                        return true
+                    }
+                    else -> false
+                }
+            }
+        }
+        return false
+    }
+
 
     @SuppressLint("NotifyDataSetChanged")
     private fun fillList() {
@@ -173,7 +223,8 @@ class AcceptanceSizeFragment :
             etxtWidth.isEnabled = acceptanceSize.recordAllowed
             etxtHeight.isEnabled = acceptanceSize.recordAllowed
             etxtChangeColumnsNumber.isEnabled = acceptanceSize.recordAllowed
-            btnOk.isEnabled = acceptanceSize.recordAllowed
+//            btnOk.isEnabled = acceptanceSize.recordAllowed
+            etxtSave.isEnabled = acceptanceSize.recordAllowed
             if (!acceptanceSize.recordAllowed)
                 ivSave.requestFocus()
         }

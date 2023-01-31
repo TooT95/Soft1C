@@ -169,16 +169,29 @@
                     android:textAlignment="textEnd"
                     android:textStyle="bold" />
 
-                <Button
-                    android:id="@+id/btn_ok"
-                    android:layout_width="wrap_content"
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/elayout_save"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="@android:string/ok" />
+                    android:layout_marginTop="@dimen/default_margin">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/etxt_save"
+                        style="@style/AutoCompleteSave"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="none"
+                        android:text="@android:string/ok"
+                        android:textAlignment="center" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <ImageButton
                     android:id="@+id/iv_save"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/default_margin"
                     android:src="@drawable/ic_save" />
 
             </LinearLayout>
