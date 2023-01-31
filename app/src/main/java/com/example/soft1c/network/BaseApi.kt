@@ -35,5 +35,11 @@ interface BaseApi {
     fun createUpdateAcceptance(@Body requestBody: RequestBody): Call<ResponseBody>
 
     @GET("VvodRazmerov")
-    fun getAcceptanceSizeData(@Query("GUID") guid:String): Call<ResponseBody>
+    fun getAcceptanceSizeData(@Query("GUID") guid: String): Call<ResponseBody>
+
+    @PATCH("VvodRazmerov")
+    fun updateAcceptanceSize(
+        @Query("GUID") guid: String,
+        @Body requestBody: RequestBody,
+    ): Call<ResponseBody>
 }

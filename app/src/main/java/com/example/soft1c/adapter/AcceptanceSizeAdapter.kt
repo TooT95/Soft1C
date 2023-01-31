@@ -18,12 +18,12 @@ class AcceptanceSizeAdapter :
         override fun areItemsTheSame(
             oldItem: SizeAcceptance.SizeData,
             newItem: SizeAcceptance.SizeData,
-        ): Boolean = (oldItem.seatNumber == newItem.seatNumber)
+        ): Boolean = (oldItem == newItem)
 
         override fun areContentsTheSame(
             oldItem: SizeAcceptance.SizeData,
             newItem: SizeAcceptance.SizeData,
-        ): Boolean = (oldItem == newItem)
+        ): Boolean = (oldItem.seatNumber == newItem.seatNumber && oldItem.weight == newItem.weight)
 
     }
 

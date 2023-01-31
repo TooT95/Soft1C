@@ -1,8 +1,9 @@
 package com.example.soft1c.repository
 
-import com.example.soft1c.model.Acceptance
 import com.example.soft1c.model.SizeAcceptance
 import com.example.soft1c.network.Network
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.RequestBody.Companion.toRequestBody
 import okhttp3.ResponseBody
 import org.json.JSONArray
 import org.json.JSONObject
@@ -28,6 +29,44 @@ class AcceptanceSizeRepository {
                         continuation.resume(getSizeDataFromJson(responseBody))
                     } else {
                         continuation.resume(SizeAcceptance(dataArray = emptyList()))
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    continuation.resumeWithException(t)
+                }
+
+            })
+        }
+    }
+
+    suspend fun updateSizeDataApi(
+        acceptanceGuid: String,
+        acceptance: SizeAcceptance,
+    ): Boolean {
+        return suspendCoroutine { continuation ->
+            val jsonArray = JSONArray()
+            acceptance.dataArray.forEach { acceptance ->
+                val jsonObject = JSONObject()
+                jsonObject.put(SEAT_NUMBER_KEY, acceptance.seatNumber)
+                jsonObject.put(LENGTH_KEY, acceptance.length)
+                jsonObject.put(WIDTH_KEY, acceptance.width)
+                jsonObject.put(HEIGHT_KEY, acceptance.height)
+                jsonObject.put(WEIGHT_KEY, acceptance.weight)
+                jsonArray.put(jsonObject)
+            }
+            val requestBody =
+                jsonArray.toString().toRequestBody("application/json".toMediaTypeOrNull())
+            Network.api.updateAcceptanceSize(acceptanceGuid, requestBody).enqueue(object :
+                Callback<ResponseBody> {
+                override fun onResponse(
+                    call: Call<ResponseBody>,
+                    response: Response<ResponseBody>,
+                ) {
+                    if (response.isSuccessful) {
+                        continuation.resume(true)
+                    } else {
+                        continuation.resume(false)
                     }
                 }
 

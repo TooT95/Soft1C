@@ -30,6 +30,7 @@ class AcceptanceViewModel(application: Application) : AndroidViewModel(applicati
     private val clientMutableData = SingleLiveEvent<Pair<Client, Boolean>>()
     private val createUpdateMutableData = SingleLiveEvent<Pair<Acceptance, Boolean>>()
     private val acceptanceSizeMutableData = SingleLiveEvent<SizeAcceptance>()
+    private val updateAcceptanceSizeMutableData = SingleLiveEvent<Boolean>()
 
     val toastLiveData: LiveData<String>
         get() = toastMutableData
@@ -48,6 +49,9 @@ class AcceptanceViewModel(application: Application) : AndroidViewModel(applicati
 
     val acceptanceSizeLiveData: LiveData<SizeAcceptance>
         get() = acceptanceSizeMutableData
+
+    val updateAcceptanceSizeLiveData: LiveData<Boolean>
+        get() = updateAcceptanceSizeMutableData
 
     fun getAcceptanceList() {
         viewModelScope.launch((exceptionScope + Dispatchers.IO)) {
@@ -77,5 +81,14 @@ class AcceptanceViewModel(application: Application) : AndroidViewModel(applicati
         viewModelScope.launch((exceptionScope + Dispatchers.IO)) {
             acceptanceSizeMutableData.postValue(sizeRepository.getSizeDataApi(acceptanceGuid))
         }
+    }
+
+    fun updateAcceptanceSize(acceptanceGuid: String, acceptance: SizeAcceptance) {
+        viewModelScope.launch((exceptionScope + Dispatchers.IO)) {
+            updateAcceptanceSizeMutableData.postValue(sizeRepository.updateSizeDataApi(
+                acceptanceGuid,
+                acceptance))
+        }
+
     }
 }

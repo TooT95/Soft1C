@@ -1,12 +1,12 @@
 package com.example.soft1c.model
 
 data class SizeAcceptance(
-    val recordAllowed: Boolean = false,
+    var recordAllowed: Boolean = false,
     val sum: Int = 0,
     val allWeight: Int = 0,
     val priceM3: Int = 0,
     val priceWeight: Int = 0,
-    val dataArray: List<SizeData>,
+    var dataArray: List<SizeData>,
 ) {
 
     data class SizeData(
