@@ -30,7 +30,6 @@ class AcceptanceListFragment :
     private var requiredTypes = 4
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        viewModel.getAcceptanceList()
         baseViewModel.downloadType(Utils.ObjectModelType.ADDRESS)
     }
 
@@ -100,8 +99,7 @@ class AcceptanceListFragment :
             chbSize.setOnClickListener(chbListener)
 
             ivAdd.setOnClickListener {
-                if (chbAcceptance.isChecked)
-                    openAcceptanceDetail(Bundle())
+                findNavController().navigate(R.id.action_acceptanceFragment_to_acceptanceFragment)
             }
             etxtDocumentNumber.setOnKeyListener(::findOpenDocumentByNumber)
             chbAcceptance.isChecked = true
@@ -149,6 +147,7 @@ class AcceptanceListFragment :
             Utils.ObjectModelType.ZONE -> {
                 Utils.zones = pairOf.second
                 closeDialogLoading()
+                viewModel.getAcceptanceList()
             }
         }
     }

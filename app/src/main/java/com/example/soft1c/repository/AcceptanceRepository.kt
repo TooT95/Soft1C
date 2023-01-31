@@ -165,6 +165,8 @@ class AcceptanceRepository {
         val ref = acceptJson.getString(REF_KEY)
         val number = acceptJson.getString(NUMBER_KEY)
         val client = acceptJson.getString(CLIENT_KEY)
+        val packageUid = acceptJson.getString(PACKAGE_UID_KEY)
+        val packageName = getPackageNameFromUid(packageUid)
         if (hasAdditionalFields) {
             val zoneUid = acceptJson.getString(ZONE_KEY)
             val zoneName = getZoneNameFromUid(zoneUid)
@@ -174,8 +176,6 @@ class AcceptanceRepository {
             val countInPackage = acceptJson.getInt(COUNT_IN_PACKAGE_KEY)
             val countPackage = acceptJson.getInt(COUNT_PACKAGE_KEY)
             val allWeight = acceptJson.getDouble(ALL_WEIGHT_KEY)
-            val packageUid = acceptJson.getString(PACKAGE_UID_KEY)
-            val packageName = getPackageNameFromUid(packageUid)
             val storeUid = acceptJson.getString(STORE_UID_KEY)
             val storeAddressName = getAddressNameFromUid(storeUid)
             val productType = acceptJson.getString(PRODUCT_TYPE_KEY)
@@ -221,6 +221,8 @@ class AcceptanceRepository {
         val weight = acceptJson.getBoolean(WEIGHT_KEY)
         val capacity = acceptJson.getBoolean(CAPACITY_KEY)
         return Acceptance(
+            _package = packageName,
+            packageUid = packageUid,
             ref = ref,
             number = number,
             client = client,
