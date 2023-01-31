@@ -3,6 +3,7 @@ package com.example.soft1c.fragment
 import android.os.Bundle
 import android.view.KeyEvent
 import android.view.View
+import android.widget.AutoCompleteTextView
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
@@ -10,6 +11,7 @@ import com.example.soft1c.R
 import com.example.soft1c.Utils
 import com.example.soft1c.databinding.FragmentAcceptanceWeightBinding
 import com.example.soft1c.model.Acceptance
+import com.example.soft1c.model.AnyModel
 import com.example.soft1c.viewmodel.AcceptanceViewModel
 import com.google.android.material.textfield.TextInputEditText
 
@@ -18,6 +20,7 @@ class AcceptanceWeightFragment :
 
     private lateinit var acceptance: Acceptance
     private val viewModel: AcceptanceViewModel by viewModels()
+    private var hasFocusCanSave = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -65,15 +68,49 @@ class AcceptanceWeightFragment :
             btnCloseCopy.setOnClickListener {
                 closeActivity()
             }
+            etxtSave.setOnKeyListener(::autoCompleteOnKeyListener)
+            etxtSave.setOnFocusChangeListener(::setAutoCompleteFocusListener)
+            etxtSaveCopy.setOnFocusChangeListener(::setAutoCompleteFocusListener)
 
-            btnSave.setOnClickListener {
-                createUpdateAcceptance()
-            }
-            btnSaveCopy.setOnClickListener {
-                createUpdateAcceptance()
-            }
+//            btnSave.setOnClickListener {
+//                createUpdateAcceptance()
+//            }
+//            btnSaveCopy.setOnClickListener {
+//                createUpdateAcceptance()
+//            }
             etxtWeight.setOnKeyListener(::customSetOnKeyListener)
         }
+    }
+
+    private fun setAutoCompleteFocusListener(view: View, hasFocus: Boolean) {
+        view as AutoCompleteTextView
+        with(binding) {
+            when (view) {
+                etxtSave, etxtSaveCopy -> if (hasFocus) {
+                    if (hasFocusCanSave) {
+                        hasFocusCanSave = !hasFocusCanSave
+                        return@with
+                    }
+                    createUpdateAcceptance()
+                }
+            }
+        }
+    }
+
+    private fun autoCompleteOnKeyListener(view: View, key: Int, keyEvent: KeyEvent): Boolean {
+        if (key == 66 && keyEvent.action == KeyEvent.ACTION_DOWN) {
+            view as AutoCompleteTextView
+            with(binding) {
+                when (view) {
+                    etxtSave -> {
+                        createUpdateAcceptance()
+                        return true
+                    }
+                    else -> false
+                }
+            }
+        }
+        return false
     }
 
     private fun customSetOnKeyListener(view: View, key: Int, keyEvent: KeyEvent): Boolean {
@@ -86,7 +123,8 @@ class AcceptanceWeightFragment :
                 }
                 when (etxtView) {
                     etxtWeight -> {
-                        btnSaveCopy.requestFocus()
+                        hasFocusCanSave = true
+                        etxtSave.requestFocus()
                         return true
                     }
                     else -> {

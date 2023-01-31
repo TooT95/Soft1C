@@ -60,6 +60,7 @@ class AcceptanceListFragment :
 
     private fun acceptanceByNumber(acceptance: Acceptance) {
         closeDialogLoading()
+        binding.etxtDocumentNumber.text?.clear()
         if (acceptance.ref.isNotEmpty())
             onItemClicked(ItemClicked.ITEM, acceptance)
         else

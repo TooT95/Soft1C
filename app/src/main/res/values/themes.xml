@@ -31,6 +31,15 @@
         <item name="android:backgroundTint">@color/white</item>
     </style>
 
+    <style name="AutoCompleteSave" parent="">
+        <item name="android:background">@color/primaryColor</item>
+        <item name="android:textColor">@color/white</item>
+    </style>
+
+    <style name="AutoCompleteSaveText" parent="Widget.MaterialComponents.TextInputLayout.FilledBox">
+        <item name="android:textColorHint">@color/white</item>
+    </style>
+
     <style name="ToolbarDefaultStyle" parent="">
         <item name="titleTextColor">@color/white</item>
     </style>

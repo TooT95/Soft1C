@@ -38,18 +38,29 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <Button
-                    android:id="@+id/btn_save"
-                    style="@style/ButtonDefaultStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/text_save" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/elayout_save"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/etxt_save"
+                        style="@style/AutoCompleteSave"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="none"
+                        android:text="@string/text_save"
+                        android:textAlignment="center"
+                        tools:ignore="LabelFor" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
                     android:id="@+id/btn_close"
                     style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/default_margin_chb"
                     android:layout_weight="1"
@@ -75,9 +86,9 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etxt_code_client"
+                        style="@style/TextInputDefault"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
                         android:hint="@string/text_code_client"
                         android:inputType="textAutoCorrect" />
 
@@ -93,9 +104,9 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etxt_seats_number"
+                        style="@style/TextInputDefault"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
                         android:hint="@string/text_number_of_seats"
                         android:inputType="number" />
 
@@ -122,9 +133,9 @@
 
                     <AutoCompleteTextView
                         android:id="@+id/etxt_zone"
+                        style="@style/TextInputDefault"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
                         android:hint="@string/text_zone"
                         android:inputType="textAutoCorrect" />
 
@@ -140,9 +151,9 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etxt_auto_number"
+                        style="@style/TextInputDefault"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
                         android:hint="@string/text_number_of_auto"
                         android:inputType="textAutoCorrect" />
 
@@ -171,9 +182,9 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etxt_card_number"
+                    style="@style/TextInputDefault"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white"
                     android:hint="@string/text_id_card_number"
                     android:inputType="textAutoCorrect" />
 
@@ -191,9 +202,9 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etxt_document_number"
+                    style="@style/TextInputDefault"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white"
                     android:hint="@string/text_number"
                     android:inputType="textAutoCorrect" />
 
@@ -261,9 +272,9 @@
 
                 <AutoCompleteTextView
                     android:id="@+id/etxt_store_address"
+                    style="@style/TextInputDefault"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white"
                     android:hint="@string/text_address"
                     android:inputType="textAutoCorrect" />
 
@@ -281,9 +292,9 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etxt_store_number"
+                    style="@style/TextInputDefault"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white"
                     android:hint="@string/text_store_number"
                     android:inputType="textAutoCorrect" />
 
@@ -300,9 +311,9 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etxt_representative"
+                    style="@style/TextInputDefault"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white"
                     android:hint="@string/text_representative"
                     android:inputType="textAutoCorrect" />
 
@@ -319,9 +330,9 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etxt_store_phone"
+                    style="@style/TextInputDefault"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white"
                     android:hint="@string/text_store_phone"
                     android:inputType="textAutoCorrect" />
 
@@ -339,9 +350,9 @@
 
                 <AutoCompleteTextView
                     android:id="@+id/etxt_product_type"
+                    style="@style/TextInputDefault"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white"
                     android:hint="@string/text_product_type"
                     android:inputType="textAutoCorrect" />
 
@@ -359,9 +370,9 @@
 
                 <AutoCompleteTextView
                     android:id="@+id/etxt_package"
+                    style="@style/TextInputDefault"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white"
                     android:hint="@string/text_package"
                     android:inputType="textAutoCorrect" />
 
@@ -385,9 +396,9 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etxt_seats_number_copy"
+                        style="@style/TextInputDefault"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
                         android:hint="@string/text_number_of_seats"
                         android:inputType="number" />
 
@@ -402,9 +413,9 @@
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/etxt_package_count"
+                        style="@style/TextInputDefault"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:backgroundTint="@color/white"
                         android:hint="@string/text_package_count"
                         android:inputType="number" />
 
@@ -423,9 +434,9 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etxt_count_in_package"
+                    style="@style/TextInputDefault"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white"
                     android:hint="@string/text_count_in_package"
                     android:inputType="number" />
 
@@ -443,9 +454,9 @@
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/etxt_document_number_copy"
+                    style="@style/TextInputDefault"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:backgroundTint="@color/white"
                     android:hint="@string/text_number"
                     android:inputType="textAutoCorrect" />
 
@@ -455,22 +466,34 @@
                 android:id="@+id/linear_btn_group_copy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/default_margin"
                 android:orientation="horizontal"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/elayout_document_number_copy">
 
-                <Button
-                    android:id="@+id/btn_save_copy"
-                    style="@style/ButtonDefaultStyle"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="@string/text_save" />
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/elayout_save_copy"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.FilledBox"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1">
+
+                    <AutoCompleteTextView
+                        android:id="@+id/etxt_save_copy"
+                        style="@style/AutoCompleteSave"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="none"
+                        android:text="@string/text_save"
+                        android:textAlignment="center"
+                        tools:ignore="LabelFor" />
+
+                </com.google.android.material.textfield.TextInputLayout>
 
                 <Button
                     android:id="@+id/btn_close_copy"
                     style="?android:attr/buttonBarButtonStyle"
-                    android:layout_width="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/default_margin_chb"
                     android:layout_weight="1"

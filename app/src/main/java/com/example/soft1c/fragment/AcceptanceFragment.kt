@@ -17,6 +17,7 @@ import com.example.soft1c.model.AnyModel
 import com.example.soft1c.model.Client
 import com.example.soft1c.viewmodel.AcceptanceViewModel
 import com.google.android.material.textfield.TextInputEditText
+import timber.log.Timber
 
 class AcceptanceFragment :
     BaseFragment<FragmentAcceptanceBinding>(FragmentAcceptanceBinding::inflate) {
@@ -24,6 +25,7 @@ class AcceptanceFragment :
     private var clientFound = false
     private lateinit var acceptance: Acceptance
     private val viewModel: AcceptanceViewModel by viewModels()
+    private var hasFocusCanSave = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -117,6 +119,9 @@ class AcceptanceFragment :
                     (it as AnyModel.PackageModel).name
                 }))
             etxtPackage.setOnKeyListener(::autoCompleteOnKeyListener)
+            etxtSave.setOnKeyListener(::autoCompleteOnKeyListener)
+            etxtSave.setOnFocusChangeListener(::setAutoCompleteFocusListener)
+            etxtSaveCopy.setOnFocusChangeListener(::setAutoCompleteFocusListener)
 
             etxtCodeClient.setOnFocusChangeListener(::etxtFocusChangeListener)
             etxtStoreNumber.setOnFocusChangeListener(::etxtFocusChangeListener)
@@ -135,11 +140,26 @@ class AcceptanceFragment :
             chbArrow.setOnClickListener(::setCheckResult)
             chbBrand.setOnClickListener(::setCheckResult)
 
-            btnSave.setOnClickListener {
-                createUpdateAcceptance()
-            }
-            btnSaveCopy.setOnClickListener {
-                createUpdateAcceptance()
+//            btnSave.setOnClickListener {
+//                createUpdateAcceptance()
+//            }
+//            btnSaveCopy.setOnClickListener {
+//                createUpdateAcceptance()
+//            }
+        }
+    }
+
+    private fun setAutoCompleteFocusListener(view: View, hasFocus: Boolean) {
+        view as AutoCompleteTextView
+        with(binding) {
+            when (view) {
+                etxtSave, etxtSaveCopy -> if (hasFocus) {
+                    if (hasFocusCanSave) {
+                        hasFocusCanSave = !hasFocusCanSave
+                        return@with
+                    }
+                    createUpdateAcceptance()
+                }
             }
         }
     }
@@ -258,6 +278,17 @@ class AcceptanceFragment :
                     else -> return false
                 }
             }
+        } else if (key == 66 && keyEvent.action == KeyEvent.ACTION_DOWN) {
+            view as AutoCompleteTextView
+            with(binding) {
+                when (view) {
+                    etxtSave -> {
+                        createUpdateAcceptance()
+                        return true
+                    }
+                    else -> false
+                }
+            }
         }
         return false
     }
@@ -293,7 +324,26 @@ class AcceptanceFragment :
                         return true
                     }
                     etxtCountInPackage -> {
-                        btnSaveCopy.requestFocus()
+                        hasFocusCanSave = true
+                        etxtSave.requestFocus()
+                        return true
+                    }
+                    else -> {
+                        return false
+                    }
+                }
+            }
+        } else if (key == 66 && keyEvent.action == KeyEvent.ACTION_DOWN) {
+            with(binding) {
+                val etxtView = view as TextInputEditText
+                if (etxtView.text!!.isEmpty()) {
+                    etxtView.error = resources.getString(R.string.text_field_is_empyt)
+                    return true
+                }
+                when (etxtView) {
+                    etxtCountInPackage -> {
+                        hasFocusCanSave = true
+                        etxtSave.requestFocus()
                         return true
                     }
                     else -> {
