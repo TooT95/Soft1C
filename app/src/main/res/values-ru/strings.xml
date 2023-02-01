@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Soft 1C</string>
-    <string name="text_adress">信息庫地址</string>
+    <string name="text_adress">адрес ИБ</string>
     <string name="text_port">порт</string>
     <string name="text_basename">наименование базы</string>
     <string name="text_username">имя пользователя</string>
@@ -50,4 +50,6 @@
     <string name="text_m3">м3</string>
     <string name="text_price_title">Цена за куб:</string>
     <string name="app_lang">ru</string>
+    <string name="text_zero">0</string>
+    <string name="text_capacity">Замер</string>
 </resources>

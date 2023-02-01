@@ -50,4 +50,6 @@
     <string name="text_m3">立方米</string>
     <string name="text_price_title">每立方價格:</string>
     <string name="app_lang">chinese</string>
+    <string name="text_zero">0</string>
+    <string name="text_capacity">測量</string>
 </resources>

@@ -28,6 +28,7 @@ class AcceptanceListFragment :
     private val viewModel: AcceptanceViewModel by viewModels()
     private val baseViewModel: BaseViewModel by viewModels()
     private var showColumnZone = true
+    private var showText = true
 
     private var requiredTypes = 4
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -102,8 +103,13 @@ class AcceptanceListFragment :
 
             chbVisibiliy.setOnClickListener {
                 showColumnZone = !showColumnZone
+                txtZone.isVisible = showColumnZone
                 initRvList()
                 viewModel.getAcceptanceList()
+            }
+            chbShowText.setOnClickListener {
+                showText = !showText
+                linearText.isVisible = showText
             }
             ivRefresh.setOnClickListener {
                 showPbLoading(true)

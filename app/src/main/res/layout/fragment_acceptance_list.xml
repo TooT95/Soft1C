@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -87,7 +88,6 @@
                 android:layout_weight="1"
                 android:checked="true" />
 
-
         </LinearLayout>
 
         <LinearLayout
@@ -131,6 +131,88 @@
                     android:src="@drawable/ic_refresh" />
 
             </androidx.cardview.widget.CardView>
+
+            <CheckBox
+                android:id="@+id/chb_show_text"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:checked="true" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/linear_text"
+            android:layout_width="match_parent"
+            android:layout_height="80dp"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/linear_commands">
+
+            <TextView
+                android:id="@+id/txt_document_number"
+                style="@style/TextNumber"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="3"
+                android:gravity="center|start"
+                android:text="@string/text_document_number" />
+
+            <TextView
+                android:id="@+id/txt_client"
+                style="@style/TextNumber"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/default_margin"
+                android:layout_weight="3"
+                android:gravity="center|start"
+                android:text="@string/text_code_client" />
+
+            <TextView
+                android:id="@+id/txt_package"
+                style="@style/TextNumber"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/default_margin"
+                android:layout_weight="3"
+                android:gravity="center|start"
+                android:text="@string/text_package" />
+
+            <TextView
+                android:id="@+id/txt_zone"
+                style="@style/TextNumber"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/default_margin"
+                android:layout_weight="1"
+                android:gravity="center|start"
+                android:text="@string/text_zone" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_marginStart="@dimen/default_margin"
+                android:layout_weight="1"
+                android:gravity="center_vertical"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/txt_empty_weight"
+                    style="@style/TextNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_chb_width"
+                    android:text="@string/text_weight" />
+
+                <TextView
+                    android:id="@+id/txt_empty_capacity"
+                    style="@style/TextNumber"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/default_chb_width"
+                    android:layout_marginTop="@dimen/default_margin"
+                    android:text="@string/text_capacity" />
+
+            </LinearLayout>
+
         </LinearLayout>
 
         <androidx.recyclerview.widget.RecyclerView
@@ -141,7 +223,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/linear_commands" />
+            app:layout_constraintTop_toBottomOf="@id/linear_text" />
 
         <ProgressBar
             android:id="@+id/pb_loading"
