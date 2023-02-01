@@ -4,18 +4,12 @@ import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
-import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.SearchView
-import androidx.core.os.bundleOf
-import androidx.fragment.app.setFragmentResult
-import androidx.navigation.fragment.findNavController
-import com.bumptech.glide.util.Util
 import com.example.soft1c.R
-import com.example.soft1c.Utils
+import com.example.soft1c.utils.Utils
 import com.example.soft1c.databinding.FragmentSearchBinding
 import com.example.soft1c.model.AnyModel
-import timber.log.Timber
 
 class SearchFragment : BaseFragment<FragmentSearchBinding>(FragmentSearchBinding::inflate) {
 

@@ -1,4 +1,4 @@
-package com.example.soft1c
+package com.example.soft1c.utils
 
 import okhttp3.Credentials
 import okhttp3.Interceptor

@@ -1,19 +1,20 @@
 package com.example.soft1c.fragment
 
-import okhttp3.Credentials
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
+import androidx.appcompat.widget.Toolbar
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.example.soft1c.Demo
+import com.example.soft1c.utils.Demo
 import com.example.soft1c.R
-import com.example.soft1c.Utils
+import com.example.soft1c.utils.Utils
 import com.example.soft1c.databinding.FragmentAuthBinding
 import com.example.soft1c.network.Network
+import com.example.soft1c.utils.MainActivity
 import com.example.soft1c.viewmodel.BaseViewModel
 import com.google.android.material.textfield.TextInputEditText
-import kotlin.text.Charsets.UTF_8
 
 class AuthFragment : BaseFragment<FragmentAuthBinding>(FragmentAuthBinding::inflate) {
 
@@ -22,6 +23,35 @@ class AuthFragment : BaseFragment<FragmentAuthBinding>(FragmentAuthBinding::infl
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.includeToolbar.toolbar.title = resources.getString(R.string.text_title_auth)
+        binding.includeToolbar.toolbar.setOnMenuItemClickListener(object :
+            Toolbar.OnMenuItemClickListener {
+            override fun onMenuItemClick(item: MenuItem?): Boolean {
+                activity?.let { fragActivity ->
+                    when (item?.itemId) {
+                        R.id.item_chinese -> {
+                            fragActivity as MainActivity
+                            fragActivity.setLocale("zh")
+                            return false
+                        }
+                        R.id.item_english -> {
+                            fragActivity as MainActivity
+                            fragActivity.setLocale("eng")
+                            return false
+                        }
+                        R.id.item_russian -> {
+                            fragActivity as MainActivity
+                            fragActivity.setLocale("ru")
+                            return false
+                        }
+                        else -> {
+                            return false
+                        }
+                    }
+                }
+                return false
+            }
+
+        })
         initUI()
         obserViewModels()
     }
@@ -66,7 +96,7 @@ class AuthFragment : BaseFragment<FragmentAuthBinding>(FragmentAuthBinding::infl
             etxtBasename.setText(baseName)
             etxtUsername.setText(username)
             etxtPassword.setText(password)
-            Utils.setAttributes(url, baseName, username, password)
+            Utils.setAttributes(url, baseName, username, password,resources.getString(R.string.app_lang))
         }
     }
 
@@ -87,7 +117,7 @@ class AuthFragment : BaseFragment<FragmentAuthBinding>(FragmentAuthBinding::infl
             if (username.isEmpty()) return else setSharedPref(Network.KEY_USERNAME, username)
             val password = checkFieldReturn(etxtPassword)
             if (password.isEmpty()) return else setSharedPref(Network.KEY_PASSWORD, password)
-            Utils.setAttributes(url, baseName, username, password)
+            Utils.setAttributes(url, baseName, username, password,resources.getString(R.string.app_lang))
         }
     }
 

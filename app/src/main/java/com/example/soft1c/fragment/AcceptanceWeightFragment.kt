@@ -8,10 +8,10 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.example.soft1c.R
-import com.example.soft1c.Utils
+import com.example.soft1c.utils.Utils
 import com.example.soft1c.databinding.FragmentAcceptanceWeightBinding
 import com.example.soft1c.model.Acceptance
-import com.example.soft1c.model.AnyModel
+import com.example.soft1c.model.AcceptanceEnableVisible
 import com.example.soft1c.viewmodel.AcceptanceViewModel
 import com.google.android.material.textfield.TextInputEditText
 
@@ -157,8 +157,8 @@ class AcceptanceWeightFragment :
         activity?.onBackPressed()
     }
 
-    private fun showDetails(acc: Acceptance) {
-        acceptance = acc
+    private fun showDetails(pair: Pair<Acceptance, List<AcceptanceEnableVisible>>) {
+        acceptance = pair.first
         if (this.acceptance.ref.isEmpty()) {
             binding.pbLoading.isVisible = false
             return

@@ -1,4 +1,4 @@
-package com.example.soft1c
+package com.example.soft1c.utils
 
 import com.example.soft1c.model.AnyModel
 
@@ -8,6 +8,7 @@ object Utils {
     var username = ""
     var password = ""
     var auth = ""
+    var lang = ""
     var productTypes: List<AnyModel> = listOf()
     var addressess: List<AnyModel> = listOf()
     var packages: List<AnyModel> = listOf()
@@ -15,12 +16,19 @@ object Utils {
     var anyModel: AnyModel? = null
     var refreshList: Boolean = false
 
-    fun setAttributes(baseUrl: String, base_name: String, user_name: String, _password: String) {
+    fun setAttributes(
+        baseUrl: String,
+        base_name: String,
+        user_name: String,
+        _password: String,
+        _lang: String
+    ) {
         base_url = baseUrl
         basename = base_name
         username = user_name
         password = _password
         auth = "/${base_name}/hs/PriemkiAPI/"
+        lang = _lang
     }
 
     object Contracts {

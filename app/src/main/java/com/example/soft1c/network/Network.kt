@@ -1,6 +1,6 @@
 package com.example.soft1c.network
 
-import com.example.soft1c.Utils
+import com.example.soft1c.utils.Utils
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit

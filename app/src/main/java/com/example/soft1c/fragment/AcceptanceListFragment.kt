@@ -10,10 +10,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soft1c.R
-import com.example.soft1c.Utils
+import com.example.soft1c.utils.Utils
 import com.example.soft1c.adapter.AcceptanceAdapter
 import com.example.soft1c.databinding.FragmentAcceptanceListBinding
 import com.example.soft1c.model.Acceptance
+import com.example.soft1c.model.AcceptanceEnableVisible
 import com.example.soft1c.model.AnyModel
 import com.example.soft1c.model.ItemClicked
 import com.example.soft1c.viewmodel.AcceptanceViewModel
@@ -58,7 +59,8 @@ class AcceptanceListFragment :
         acceptanceAdapter.submitList(list)
     }
 
-    private fun acceptanceByNumber(acceptance: Acceptance) {
+    private fun acceptanceByNumber(pair: Pair<Acceptance, List<AcceptanceEnableVisible>>) {
+        val acceptance = pair.first
         closeDialogLoading()
         binding.etxtDocumentNumber.text?.clear()
         if (acceptance.ref.isNotEmpty())
@@ -117,8 +119,12 @@ class AcceptanceListFragment :
             adapter = acceptanceAdapter
             setHasFixedSize(true)
             layoutManager = LinearLayoutManager(requireContext())
-            addItemDecoration(DividerItemDecoration(requireContext(),
-                DividerItemDecoration.VERTICAL))
+            addItemDecoration(
+                DividerItemDecoration(
+                    requireContext(),
+                    DividerItemDecoration.VERTICAL
+                )
+            )
         }
     }
 
@@ -182,14 +188,16 @@ class AcceptanceListFragment :
 
     private fun openAcceptanceDetail(bundle: Bundle) {
         with(binding) {
-            findNavController().navigate(when {
-                chbAcceptance.isChecked -> R.id.action_acceptanceFragment_to_acceptanceFragment
-                chbWeight.isChecked -> R.id.action_acceptanceListFragment_to_acceptanceWeightFragment
-                chbSize.isChecked -> R.id.action_acceptanceListFragment_to_acceptanceSizeFragment
-                else -> {
-                    R.id.action_acceptanceFragment_to_acceptanceFragment
-                }
-            }, bundle)
+            findNavController().navigate(
+                when {
+                    chbAcceptance.isChecked -> R.id.action_acceptanceFragment_to_acceptanceFragment
+                    chbWeight.isChecked -> R.id.action_acceptanceListFragment_to_acceptanceWeightFragment
+                    chbSize.isChecked -> R.id.action_acceptanceListFragment_to_acceptanceSizeFragment
+                    else -> {
+                        R.id.action_acceptanceFragment_to_acceptanceFragment
+                    }
+                }, bundle
+            )
         }
     }
 

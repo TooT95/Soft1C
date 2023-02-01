@@ -1,11 +1,10 @@
 package com.example.soft1c.repository
 
-import com.example.soft1c.Utils
+import com.example.soft1c.utils.Utils
 import com.example.soft1c.model.*
 import com.example.soft1c.network.Network
 import okhttp3.ResponseBody
 import org.json.JSONArray
-import org.json.JSONObject
 import kotlin.coroutines.suspendCoroutine
 import retrofit2.Call
 import retrofit2.Callback
@@ -14,7 +13,7 @@ import timber.log.Timber
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-class BaseRepository() {
+class BaseRepository(private val lang: String) {
 
     suspend fun getAccessToken(): Boolean {
         return suspendCoroutine { continuation ->
@@ -78,7 +77,13 @@ class BaseRepository() {
         for (item in 0 until arrayJson.length()) {
             val objectJson = arrayJson.getJSONObject(item)
             val ref = objectJson.getString(Utils.Contracts.REF_KEY)
-            val name = objectJson.getString(Utils.Contracts.NAME_KEY)
+            val name = when (type) {
+                Utils.ObjectModelType._PACKAGE, Utils.ObjectModelType.PRODUCT_TYPE -> {
+                    val addLang = if (lang == "chinese") AcceptanceRepository.ON_CHINESE else ""
+                    objectJson.getString(Utils.Contracts.NAME_KEY + addLang)
+                }
+                else -> objectJson.getString(Utils.Contracts.NAME_KEY)
+            }
             val code = objectJson.getString(Utils.Contracts.CODE_KEY)
             val anyObject = when (type) {
                 Utils.ObjectModelType.ADDRESS -> AnyModel.AddressModel(ref, name, code)

@@ -1,7 +1,8 @@
 package com.example.soft1c.repository
 
-import com.example.soft1c.Utils
+import com.example.soft1c.utils.Utils
 import com.example.soft1c.model.Acceptance
+import com.example.soft1c.model.AcceptanceEnableVisible
 import com.example.soft1c.model.AnyModel
 import com.example.soft1c.model.Client
 import com.example.soft1c.network.Network
@@ -19,7 +20,7 @@ import kotlin.coroutines.suspendCoroutine
 
 class AcceptanceRepository {
 
-    suspend fun getAcceptanceApi(number: String): Acceptance {
+    suspend fun getAcceptanceApi(number: String): Pair<Acceptance, List<AcceptanceEnableVisible>> {
         return suspendCoroutine { continuation ->
             Network.api.acceptance(number).enqueue(object : Callback<ResponseBody> {
                 override fun onResponse(
@@ -30,7 +31,7 @@ class AcceptanceRepository {
                         val responseBody = response.body()?.string() ?: ""
                         continuation.resume(getAcceptanceJson(responseBody))
                     } else {
-                        continuation.resume(Acceptance(""))
+                        continuation.resume(Pair(Acceptance(""), emptyList()))
                     }
                 }
 
@@ -145,9 +146,20 @@ class AcceptanceRepository {
         }
     }
 
-    private fun getAcceptanceJson(responseString: String): Acceptance {
+    private fun getAcceptanceJson(responseString: String): Pair<Acceptance, List<AcceptanceEnableVisible>> {
         val jsonArray = JSONArray(responseString)
-        return getaAcceptanceFromJsonObject(jsonArray.getJSONObject(0), true)
+        val jsonObject = jsonArray.getJSONObject(0)
+        val acceptance = getaAcceptanceFromJsonObject(jsonObject, true)
+        val enableVisibleList = mutableListOf<AcceptanceEnableVisible>()
+        val propertyArray = jsonObject.getJSONArray(FIELDS_PROPERTY_KEY)
+        for (item in 0 until propertyArray.length()) {
+            val propertyJson = propertyArray.getJSONObject(item)
+            val field = propertyJson.getString(FIELD_KEY)
+            val enable = propertyJson.getBoolean(ENABLE_KEY)
+            val visible = propertyJson.getBoolean(VISIBLE_KEY)
+            enableVisibleList.add(AcceptanceEnableVisible(field, enable, visible))
+        }
+        return Pair(acceptance, enableVisibleList)
     }
 
     private fun getAcceptanceList(responseString: String): List<Acceptance> {
@@ -265,31 +277,36 @@ class AcceptanceRepository {
     }
 
     companion object {
-        private const val REF_KEY = "Ссылка"
-        private const val NUMBER_KEY = "Номер"
-        private const val CLIENT_KEY = "Клиент"
-        private const val AUTO_NUMBER_KEY = "НомерАвто"
-        private const val ID_CARD_KEY = "IDПродавца"
-        private const val WEIGHT_KEY = "Вес"
-        private const val CAPACITY_KEY = "Замер"
-        private const val ZONE_KEY = "Зона"
-        private const val COUNT_SEAT_KEY = "КоличествоМест"
-        private const val COUNT_IN_PACKAGE_KEY = "КоличествоВУпаковке"
-        private const val COUNT_PACKAGE_KEY = "КоличествоТиповУпаковок"
-        private const val ALL_WEIGHT_KEY = "ОбщийВес"
-        private const val PACKAGE_UID_KEY = "ТипУпаковки"
-        private const val PRODUCT_TYPE_KEY = "ВидТовара"
-        private const val STORE_UID_KEY = "АдресМагазина"
-        private const val PHONE_KEY = "ТелефонМагазина"
-        private const val STORE_NAME_KEY = "НаименованиеМагазина"
-        private const val REPRESENTATIVE_NAME_KEY = "ИмяПредставителя"
-        private const val BATCH_GUID_KEY = "GUIDПартии"
-        private const val Z_KEY = "ZТовар"
-        private const val BRAND_KEY = "Брэнд"
-        private const val GLASS_KEY = "Стекло"
-        private const val EXPENSIVE_KEY = "Дорогой"
-        private const val NOT_TURN_OVER_KEY = "НеКантовать"
-        private const val ERROR_ARRAY = "ПричинаОшибки"
+        const val REF_KEY = "Ссылка"
+        const val NUMBER_KEY = "Номер"
+        const val CLIENT_KEY = "Клиент"
+        const val AUTO_NUMBER_KEY = "НомерАвто"
+        const val ID_CARD_KEY = "IDПродавца"
+        const val WEIGHT_KEY = "Вес"
+        const val CAPACITY_KEY = "Замер"
+        const val ZONE_KEY = "Зона"
+        const val COUNT_SEAT_KEY = "КоличествоМест"
+        const val COUNT_IN_PACKAGE_KEY = "КоличествоВУпаковке"
+        const val COUNT_PACKAGE_KEY = "КоличествоТиповУпаковок"
+        const val ALL_WEIGHT_KEY = "ОбщийВес"
+        const val PACKAGE_UID_KEY = "ТипУпаковки"
+        const val PRODUCT_TYPE_KEY = "ВидТовара"
+        const val STORE_UID_KEY = "АдресМагазина"
+        const val PHONE_KEY = "ТелефонМагазина"
+        const val STORE_NAME_KEY = "НаименованиеМагазина"
+        const val REPRESENTATIVE_NAME_KEY = "ИмяПредставителя"
+        const val BATCH_GUID_KEY = "GUIDПартии"
+        const val Z_KEY = "ZТовар"
+        const val BRAND_KEY = "Брэнд"
+        const val GLASS_KEY = "Стекло"
+        const val EXPENSIVE_KEY = "Дорогой"
+        const val NOT_TURN_OVER_KEY = "НеКантовать"
+        const val ERROR_ARRAY = "ПричинаОшибки"
+        const val FIELDS_PROPERTY_KEY = "ПараметрыВидимости"
+        const val FIELD_KEY = "Поле"
+        const val ENABLE_KEY = "Доступность"
+        const val VISIBLE_KEY = "Видимость"
+        const val ON_CHINESE = "НаКитайском"
     }
 
 }

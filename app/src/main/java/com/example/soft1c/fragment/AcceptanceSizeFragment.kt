@@ -10,13 +10,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.soft1c.R
-import com.example.soft1c.Utils
 import com.example.soft1c.adapter.AcceptanceSizeAdapter
 import com.example.soft1c.databinding.FragmentAcceptanceSizeBinding
-import com.example.soft1c.model.Acceptance
-import com.example.soft1c.model.AnyModel
-import com.example.soft1c.model.ItemClicked
-import com.example.soft1c.model.SizeAcceptance
+import com.example.soft1c.model.*
 import com.example.soft1c.viewmodel.AcceptanceViewModel
 import timber.log.Timber
 
@@ -58,8 +54,8 @@ class AcceptanceSizeFragment :
         }
     }
 
-    private fun showAcceptanceDetail(acc: Acceptance) {
-        acceptance = acc
+    private fun showAcceptanceDetail(pair: Pair<Acceptance, List<AcceptanceEnableVisible>>) {
+        acceptance = pair.first
         with(binding) {
             txtSeatCount.text = acceptance.countSeat.toString()
             txtPackage.text = acceptance._package
@@ -146,8 +142,8 @@ class AcceptanceSizeFragment :
                 showDialogLoading()
             }
             etxtWidth.setOnFocusChangeListener { _, hasFocus ->
-                if(hasFocus){
-                    if(etxtLength.text.isEmpty()) etxtLength.requestFocus()
+                if (hasFocus) {
+                    if (etxtLength.text.isEmpty()) etxtLength.requestFocus()
                 }
             }
         }

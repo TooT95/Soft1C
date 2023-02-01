@@ -5,9 +5,11 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.soft1c.SingleLiveEvent
+import com.example.soft1c.R
+import com.example.soft1c.utils.SingleLiveEvent
 import com.example.soft1c.model.AnyModel
 import com.example.soft1c.repository.BaseRepository
+import com.example.soft1c.utils.Utils
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -17,7 +19,7 @@ class BaseViewModel(application: Application) : AndroidViewModel(application) {
     private val exceptionScope = CoroutineExceptionHandler { coroutineContext, throwable ->
         toastMutableData.postValue("Error on ${coroutineContext}, text ${throwable.message}")
     }
-    private val repository = BaseRepository()
+    private val repository = BaseRepository(Utils.lang)
 
     private val authMutableData = MutableLiveData<Boolean>()
     private val toastMutableData = MutableLiveData<String>()

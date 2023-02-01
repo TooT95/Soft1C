@@ -5,8 +5,9 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.soft1c.SingleLiveEvent
+import com.example.soft1c.utils.SingleLiveEvent
 import com.example.soft1c.model.Acceptance
+import com.example.soft1c.model.AcceptanceEnableVisible
 import com.example.soft1c.model.Client
 import com.example.soft1c.model.SizeAcceptance
 import com.example.soft1c.repository.AcceptanceRepository
@@ -17,7 +18,8 @@ import kotlinx.coroutines.launch
 
 class AcceptanceViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository = AcceptanceRepository()
+    private val repository =
+        AcceptanceRepository()
     private val sizeRepository = AcceptanceSizeRepository()
 
     private val exceptionScope = CoroutineExceptionHandler { coroutineContext, throwable ->
@@ -26,7 +28,8 @@ class AcceptanceViewModel(application: Application) : AndroidViewModel(applicati
 
     private val toastMutableData = SingleLiveEvent<String>()
     private val acceptanceListMutableData = MutableLiveData<List<Acceptance>>()
-    private val acceptanceMutableData = SingleLiveEvent<Acceptance>()
+    private val acceptanceMutableData =
+        SingleLiveEvent<Pair<Acceptance, List<AcceptanceEnableVisible>>>()
     private val clientMutableData = SingleLiveEvent<Pair<Client, Boolean>>()
     private val createUpdateMutableData = SingleLiveEvent<Pair<Acceptance, String>>()
     private val acceptanceSizeMutableData = SingleLiveEvent<SizeAcceptance>()
@@ -38,7 +41,7 @@ class AcceptanceViewModel(application: Application) : AndroidViewModel(applicati
     val acceptanceListLiveData: LiveData<List<Acceptance>>
         get() = acceptanceListMutableData
 
-    val acceptanceLiveData: LiveData<Acceptance>
+    val acceptanceLiveData: LiveData<Pair<Acceptance, List<AcceptanceEnableVisible>>>
         get() = acceptanceMutableData
 
     val clientLiveData: LiveData<Pair<Client, Boolean>>
@@ -85,9 +88,12 @@ class AcceptanceViewModel(application: Application) : AndroidViewModel(applicati
 
     fun updateAcceptanceSize(acceptanceGuid: String, acceptance: SizeAcceptance) {
         viewModelScope.launch((exceptionScope + Dispatchers.IO)) {
-            updateAcceptanceSizeMutableData.postValue(sizeRepository.updateSizeDataApi(
-                acceptanceGuid,
-                acceptance))
+            updateAcceptanceSizeMutableData.postValue(
+                sizeRepository.updateSizeDataApi(
+                    acceptanceGuid,
+                    acceptance
+                )
+            )
         }
 
     }
