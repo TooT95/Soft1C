@@ -15,8 +15,10 @@ import com.example.soft1c.adapter.AcceptanceSizeAdapter
 import com.example.soft1c.databinding.FragmentAcceptanceSizeBinding
 import com.example.soft1c.model.Acceptance
 import com.example.soft1c.model.AnyModel
+import com.example.soft1c.model.ItemClicked
 import com.example.soft1c.model.SizeAcceptance
 import com.example.soft1c.viewmodel.AcceptanceViewModel
+import timber.log.Timber
 
 class AcceptanceSizeFragment :
     BaseFragment<FragmentAcceptanceSizeBinding>(FragmentAcceptanceSizeBinding::inflate) {
@@ -86,8 +88,6 @@ class AcceptanceSizeFragment :
                 indexSeatNumber += 1
             }
         }
-        if (acceptanceSize.recordAllowed)
-            acceptanceSize.recordAllowed = indexSeatNumber != acceptanceSize.dataArray.size
         if (indexSeatNumber == 0) indexSeatNumber = 1
         binding.etxtCurrentIndex.setText(indexSeatNumber.toString())
     }
@@ -102,14 +102,24 @@ class AcceptanceSizeFragment :
                         return@with
                     }
                     fillList()
-                    etxtLength.requestFocus()
+                    Timber.d("setAutoCompleteFocusListener")
                 }
             }
         }
     }
 
+    private fun sizeItemClicked(sizeAcceptance: SizeAcceptance.SizeData, itemClicked: ItemClicked) {
+        when (itemClicked) {
+            ItemClicked.SIZE_ITEM -> {
+                indexSeatNumber = sizeAcceptance.seatNumber
+                binding.etxtCurrentIndex.setText(indexSeatNumber.toString())
+            }
+            else -> {}
+        }
+    }
+
     private fun initUI() {
-        sizeAdapter = AcceptanceSizeAdapter()
+        sizeAdapter = AcceptanceSizeAdapter(::sizeItemClicked)
         showPbLoading(true)
         with(binding) {
             includeToolbar.toolbar.title = resources.getString(R.string.text_title_acceptance)
@@ -131,14 +141,14 @@ class AcceptanceSizeFragment :
             etxtSave.setOnKeyListener(::autoCompleteOnKeyListener)
             etxtSave.setOnFocusChangeListener(::setAutoCompleteFocusListener)
 
-//            btnOk.setOnClickListener {
-//                fillList()
-//                etxtLength.requestFocus()
-//            }
-
             ivSave.setOnClickListener {
                 viewModel.updateAcceptanceSize(acceptanceGuid, acceptanceSize)
                 showDialogLoading()
+            }
+            etxtWidth.setOnFocusChangeListener { _, hasFocus ->
+                if(hasFocus){
+                    if(etxtLength.text.isEmpty()) etxtLength.requestFocus()
+                }
             }
         }
     }
@@ -166,29 +176,42 @@ class AcceptanceSizeFragment :
         if (!checkedFillFields()) return
         val listData = acceptanceSize.dataArray.toMutableList()
         with(binding) {
-            val seatNumber = etxtChangeColumnsNumber.text.toString()
+            val seatNumberText = etxtChangeColumnsNumber.text.toString()
             val length = etxtLength.text.toString().toInt()
             val width = etxtWidth.text.toString().toInt()
             val height = etxtHeight.text.toString().toInt()
-
-            for (index in 0 until seatNumber.toInt()) {
-                if (listData.size < indexSeatNumber) {
-                    acceptanceSize.recordAllowed = false
-                    continue
+            when {
+                seatNumberText.isEmpty() -> {
+                    listData.forEach { listElement ->
+                        if (listElement.seatNumber == indexSeatNumber) {
+                            listElement.length = length
+                            listElement.width = width
+                            listElement.height = height
+                            listElement.weight = (length * width * height * 0.000001).toInt()
+                            indexSeatNumber = 1
+                        }
+                    }
                 }
-                val listElement = listData[indexSeatNumber - 1]
-                listElement.length = length
-                listElement.width = width
-                listElement.height = height
-                listElement.weight = length * width * height
-                indexSeatNumber += 1
+                else -> {
+                    for (index in 0 until seatNumberText.toInt()) {
+                        if (listData.size < indexSeatNumber) {
+                            continue
+                        }
+                        val listElement = listData[indexSeatNumber - 1]
+                        listElement.length = length
+                        listElement.width = width
+                        listElement.height = height
+                        listElement.weight = (length * width * height * 0.000001).toInt()
+                        indexSeatNumber += 1
+                    }
+
+                }
             }
-            etxtLength.text.clear()
-            etxtWidth.text.clear()
-            etxtHeight.text.clear()
             etxtChangeColumnsNumber.text.clear()
+            etxtHeight.text.clear()
+            etxtWidth.text.clear()
+            etxtLength.text.clear()
             fillIndexSeatNumber()
-            enableFields()
         }
         sizeAdapter.submitList(listData)
         sizeAdapter.notifyDataSetChanged()
@@ -197,7 +220,6 @@ class AcceptanceSizeFragment :
 
     private fun checkedFillFields(): Boolean {
         with(binding) {
-            if (!checkedEditTextField(etxtChangeColumnsNumber)) return false
             if (!checkedEditTextField(etxtLength)) return false
             if (!checkedEditTextField(etxtWidth)) return false
             if (!checkedEditTextField(etxtHeight)) return false

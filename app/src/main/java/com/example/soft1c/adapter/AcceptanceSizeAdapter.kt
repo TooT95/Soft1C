@@ -8,9 +8,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.soft1c.R
 import com.example.soft1c.databinding.ItemAcceptanceSizeBinding
 import com.example.soft1c.extension.inflateLayout
+import com.example.soft1c.model.ItemClicked
 import com.example.soft1c.model.SizeAcceptance
 
-class AcceptanceSizeAdapter :
+class AcceptanceSizeAdapter(private val onItemClicked: (acceptanceSize: SizeAcceptance.SizeData, itemClicked: ItemClicked) -> Unit) :
     ListAdapter<SizeAcceptance.SizeData, AcceptanceSizeAdapter.AcceptanceSizeHolder>(
         AcceptanceSizeDiffUtil()) {
 
@@ -27,10 +28,16 @@ class AcceptanceSizeAdapter :
 
     }
 
-    class AcceptanceSizeHolder(view: View) : RecyclerView.ViewHolder(view) {
+    class AcceptanceSizeHolder(
+        private val onItemClicked: (acceptanceSize: SizeAcceptance.SizeData, itemClicked: ItemClicked) -> Unit,
+        view: View,
+    ) : RecyclerView.ViewHolder(view) {
 
         private val itemBinding = ItemAcceptanceSizeBinding.bind(view)
         fun onBind(acceptance: SizeAcceptance.SizeData) {
+            itemView.setOnClickListener {
+                onItemClicked(acceptance, ItemClicked.SIZE_ITEM)
+            }
             with(itemBinding) {
                 txtSeatNumber.text = acceptance.seatNumber.toString()
                 txtLength.text = acceptance.length.toString()
@@ -44,7 +51,8 @@ class AcceptanceSizeAdapter :
     override fun getItemCount(): Int = currentList.size
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AcceptanceSizeHolder {
-        return AcceptanceSizeHolder(parent.inflateLayout(R.layout.item_acceptance_size))
+        return AcceptanceSizeHolder(onItemClicked,
+            parent.inflateLayout(R.layout.item_acceptance_size))
     }
 
     override fun onBindViewHolder(holder: AcceptanceSizeHolder, position: Int) {

@@ -12,11 +12,15 @@ import com.example.soft1c.extension.inflateLayout
 import com.example.soft1c.model.Acceptance
 import com.example.soft1c.model.ItemClicked
 
-class AcceptanceAdapter(private val onItemClicked: (itemClicked: ItemClicked, acceptance: Acceptance) -> Unit) :
+class AcceptanceAdapter(
+    private val onItemClicked: (itemClicked: ItemClicked, acceptance: Acceptance) -> Unit,
+    private val showColumnZone: Boolean,
+) :
     ListAdapter<Acceptance, AcceptanceAdapter.AcceptanceHolder>(AcceptanceDiffUtil()) {
 
     class AcceptanceHolder(
         private val onItemClicked: (itemClicked: ItemClicked, acceptance: Acceptance) -> Unit,
+        private val showColumnZone: Boolean,
         view: View,
     ) : RecyclerView.ViewHolder(view) {
 
@@ -27,15 +31,17 @@ class AcceptanceAdapter(private val onItemClicked: (itemClicked: ItemClicked, ac
                 onItemClicked(ItemClicked.ITEM, acceptance)
             }
             with(binding) {
-                binding.txtDocumentNumber.text = acceptance.number
-                binding.txtClient.text = acceptance.client
-                binding.txtPackage.text = acceptance._package
+                txtDocumentNumber.text = acceptance.number
+                txtClient.text = acceptance.client
+                txtPackage.text = acceptance._package
+                txtZone.text = acceptance.zone
+                txtZone.isVisible = showColumnZone
 
-                binding.txtEmptyWeight.isVisible = !acceptance.weight
-                binding.txtEmptyCapacity.isVisible = !acceptance.capacity
+                txtEmptyWeight.isVisible = !acceptance.weight
+                txtEmptyCapacity.isVisible = !acceptance.capacity
 
-                binding.ivWeight.isVisible = acceptance.weight
-                binding.ivCapacity.isVisible = acceptance.capacity
+                ivWeight.isVisible = acceptance.weight
+                ivCapacity.isVisible = acceptance.capacity
             }
         }
     }
@@ -51,7 +57,9 @@ class AcceptanceAdapter(private val onItemClicked: (itemClicked: ItemClicked, ac
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AcceptanceHolder {
-        return AcceptanceHolder(onItemClicked, parent.inflateLayout(R.layout.item_acceptance))
+        return AcceptanceHolder(onItemClicked,
+            showColumnZone,
+            parent.inflateLayout(R.layout.item_acceptance))
     }
 
     override fun onBindViewHolder(holder: AcceptanceHolder, position: Int) {

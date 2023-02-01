@@ -28,7 +28,7 @@ class AcceptanceViewModel(application: Application) : AndroidViewModel(applicati
     private val acceptanceListMutableData = MutableLiveData<List<Acceptance>>()
     private val acceptanceMutableData = SingleLiveEvent<Acceptance>()
     private val clientMutableData = SingleLiveEvent<Pair<Client, Boolean>>()
-    private val createUpdateMutableData = SingleLiveEvent<Pair<Acceptance, Boolean>>()
+    private val createUpdateMutableData = SingleLiveEvent<Pair<Acceptance, String>>()
     private val acceptanceSizeMutableData = SingleLiveEvent<SizeAcceptance>()
     private val updateAcceptanceSizeMutableData = SingleLiveEvent<Boolean>()
 
@@ -44,7 +44,7 @@ class AcceptanceViewModel(application: Application) : AndroidViewModel(applicati
     val clientLiveData: LiveData<Pair<Client, Boolean>>
         get() = clientMutableData
 
-    val createUpdateLiveData: LiveData<Pair<Acceptance, Boolean>>
+    val createUpdateLiveData: LiveData<Pair<Acceptance, String>>
         get() = createUpdateMutableData
 
     val acceptanceSizeLiveData: LiveData<SizeAcceptance>

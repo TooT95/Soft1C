@@ -46,8 +46,8 @@ class AcceptanceWeightFragment :
         viewModel.createUpdateLiveData.observe(viewLifecycleOwner, ::createUpdateAcceptance)
     }
 
-    private fun createUpdateAcceptance(pair: Pair<Acceptance, Boolean>) {
-        if (!pair.second) return
+    private fun createUpdateAcceptance(pair: Pair<Acceptance, String>) {
+        if (pair.second.isNotEmpty()) return
         Utils.refreshList = true
         activity?.onBackPressed()
     }

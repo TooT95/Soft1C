@@ -26,6 +26,7 @@ class AcceptanceListFragment :
     private lateinit var acceptanceAdapter: AcceptanceAdapter
     private val viewModel: AcceptanceViewModel by viewModels()
     private val baseViewModel: BaseViewModel by viewModels()
+    private var showColumnZone = true
 
     private var requiredTypes = 4
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -69,14 +70,7 @@ class AcceptanceListFragment :
     private fun initUI() {
         if (Utils.refreshList) viewModel.getAcceptanceList()
         showPbLoading(true)
-        acceptanceAdapter = AcceptanceAdapter(::onItemClicked)
-        with(binding.rvAcceptanceList) {
-            adapter = acceptanceAdapter
-            setHasFixedSize(true)
-            layoutManager = LinearLayoutManager(requireContext())
-            addItemDecoration(DividerItemDecoration(requireContext(),
-                DividerItemDecoration.VERTICAL))
-        }
+        initRvList()
 
         val chbListener = View.OnClickListener {
             with(binding)
@@ -103,8 +97,29 @@ class AcceptanceListFragment :
             }
             etxtDocumentNumber.setOnKeyListener(::findOpenDocumentByNumber)
             chbAcceptance.isChecked = true
+
+            chbVisibiliy.setOnClickListener {
+                showColumnZone = !showColumnZone
+                initRvList()
+                viewModel.getAcceptanceList()
+            }
+            ivRefresh.setOnClickListener {
+                showPbLoading(true)
+                viewModel.getAcceptanceList()
+            }
         }
 
+    }
+
+    private fun initRvList() {
+        acceptanceAdapter = AcceptanceAdapter(::onItemClicked, showColumnZone)
+        with(binding.rvAcceptanceList) {
+            adapter = acceptanceAdapter
+            setHasFixedSize(true)
+            layoutManager = LinearLayoutManager(requireContext())
+            addItemDecoration(DividerItemDecoration(requireContext(),
+                DividerItemDecoration.VERTICAL))
+        }
     }
 
     private fun findOpenDocumentByNumber(eView: View, key: Int, event: KeyEvent): Boolean {

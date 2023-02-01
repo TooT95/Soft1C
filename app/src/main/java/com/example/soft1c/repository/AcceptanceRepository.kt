@@ -93,7 +93,7 @@ class AcceptanceRepository {
         }
     }
 
-    suspend fun createUpdateAccApi(acceptance: Acceptance): Pair<Acceptance, Boolean> {
+    suspend fun createUpdateAccApi(acceptance: Acceptance): Pair<Acceptance, String> {
         return suspendCoroutine { continuation ->
             val jsonObject = JSONObject()
             if (acceptance.ref.isNotEmpty())
@@ -128,9 +128,12 @@ class AcceptanceRepository {
                         response: Response<ResponseBody>,
                     ) {
                         if (response.isSuccessful) {
-                            continuation.resume(Pair(acceptance, true))
+                            continuation.resume(Pair(acceptance, ""))
                         } else {
-                            continuation.resume(Pair(acceptance, false))
+                            val errorBody = response.errorBody()?.string()
+                            val jsonError =
+                                JSONArray(errorBody).getJSONObject(0).getString(ERROR_ARRAY)
+                            continuation.resume(Pair(acceptance, jsonError))
                         }
                     }
 
@@ -167,9 +170,9 @@ class AcceptanceRepository {
         val client = acceptJson.getString(CLIENT_KEY)
         val packageUid = acceptJson.getString(PACKAGE_UID_KEY)
         val packageName = getPackageNameFromUid(packageUid)
+        val zoneUid = acceptJson.getString(ZONE_KEY)
+        val zoneName = getZoneNameFromUid(zoneUid)
         if (hasAdditionalFields) {
-            val zoneUid = acceptJson.getString(ZONE_KEY)
-            val zoneName = getZoneNameFromUid(zoneUid)
             val autoNumber = acceptJson.getString(AUTO_NUMBER_KEY)
             val idCard = acceptJson.getString(ID_CARD_KEY)
             val countSeat = acceptJson.getInt(COUNT_SEAT_KEY)
@@ -222,6 +225,8 @@ class AcceptanceRepository {
         val capacity = acceptJson.getBoolean(CAPACITY_KEY)
         return Acceptance(
             _package = packageName,
+            zoneUid = zoneUid,
+            zone = zoneName,
             packageUid = packageUid,
             ref = ref,
             number = number,
@@ -284,6 +289,7 @@ class AcceptanceRepository {
         private const val GLASS_KEY = "Стекло"
         private const val EXPENSIVE_KEY = "Дорогой"
         private const val NOT_TURN_OVER_KEY = "НеКантовать"
+        private const val ERROR_ARRAY = "ПричинаОшибки"
     }
 
 }

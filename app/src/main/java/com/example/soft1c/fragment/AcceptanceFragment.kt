@@ -9,6 +9,7 @@ import android.widget.CheckBox
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
+import com.bumptech.glide.util.Util
 import com.example.soft1c.R
 import com.example.soft1c.Utils
 import com.example.soft1c.databinding.FragmentAcceptanceBinding
@@ -51,8 +52,11 @@ class AcceptanceFragment :
         viewModel.createUpdateLiveData.observe(viewLifecycleOwner, ::createUpdateAcceptance)
     }
 
-    private fun createUpdateAcceptance(pair: Pair<Acceptance, Boolean>) {
-        if (!pair.second) return
+    private fun createUpdateAcceptance(pair: Pair<Acceptance, String>) {
+        if (pair.second.isNotEmpty()) {
+            toast(pair.second)
+            return
+        }
         Utils.refreshList = true
         activity?.onBackPressed()
     }
@@ -133,6 +137,9 @@ class AcceptanceFragment :
             etxtSeatsNumberCopy.setOnFocusChangeListener(::etxtFocusChangeListener)
             etxtStorePhone.setOnFocusChangeListener(::etxtFocusChangeListener)
             etxtZone.setOnFocusChangeListener(::etxtAutoCompleteFocusChangeListener)
+            etxtStoreAddress.setOnFocusChangeListener(::etxtAutoCompleteFocusChangeListener)
+            etxtProductType.setOnFocusChangeListener(::etxtAutoCompleteFocusChangeListener)
+            etxtPackage.setOnFocusChangeListener(::etxtAutoCompleteFocusChangeListener)
 
             chbZ.setOnClickListener(::setCheckResult)
             chbExclamation.setOnClickListener(::setCheckResult)
@@ -214,64 +221,30 @@ class AcceptanceFragment :
             with(binding) {
                 when (view) {
                     etxtZone -> {
-                        val element = Utils.zones.find {
-                            (it as AnyModel.Zone).name == view.text.toString()
-                        }
-                        if (element == null) {
-                            view.requestFocus()
-                            return false
-                        }
-                        element as AnyModel.Zone
-                        acceptance.zone = element.name
-                        acceptance.zoneUid = element.ref
+                        findAndFillAnyModel(Utils.zones,
+                            Utils.ObjectModelType.ZONE,
+                            view)
                         etxtCardNumber.requestFocus()
                         return true
                     }
                     etxtStoreAddress -> {
-                        if (view.adapter.count == 0) {
-                            view.requestFocus()
-                            return false
-                        }
-                        val textElement = view.adapter.getItem(0)
-                        val element = Utils.addressess.find {
-                            (it as AnyModel.AddressModel).name == textElement
-                        }
-                        element as AnyModel.AddressModel
-                        acceptance.storeAddressName = element.name
-                        acceptance.storeUid = element.ref
-                        view.setText(element.name)
+                        findAndFillAnyModel(Utils.addressess,
+                            Utils.ObjectModelType.ADDRESS,
+                            view)
                         etxtStoreNumber.requestFocus()
                         return true
                     }
                     etxtProductType -> {
-                        if (view.adapter.count == 0) {
-                            view.requestFocus()
-                            return false
-                        }
-                        val textElement = view.adapter.getItem(0)
-                        val element = Utils.productTypes.find {
-                            (it as AnyModel.ProductType).name == textElement
-                        }
-                        element as AnyModel.ProductType
-                        acceptance.productTypeName = element.name
-                        acceptance.productType = element.ref
-                        view.setText(element.name)
+                        findAndFillAnyModel(Utils.productTypes,
+                            Utils.ObjectModelType.PRODUCT_TYPE,
+                            view)
                         etxtPackage.requestFocus()
                         return true
                     }
                     etxtPackage -> {
-                        if (view.adapter.count == 0) {
-                            view.requestFocus()
-                            return false
-                        }
-                        val textElement = view.adapter.getItem(0)
-                        val element = Utils.packages.find {
-                            (it as AnyModel.PackageModel).name == textElement
-                        }
-                        element as AnyModel.PackageModel
-                        acceptance._package = element.name
-                        acceptance.packageUid = element.ref
-                        view.setText(element.name)
+                        findAndFillAnyModel(Utils.packages,
+                            Utils.ObjectModelType._PACKAGE,
+                            view)
                         etxtSeatsNumberCopy.requestFocus()
                         return true
                     }
@@ -293,14 +266,65 @@ class AcceptanceFragment :
         return false
     }
 
+    private fun findAndFillAnyModel(
+        anyModelList: List<AnyModel>,
+        model: Int,
+        view: AutoCompleteTextView,
+    ) {
+        val textElement = when {
+            (view.adapter.count != 0) -> view.adapter.getItem(0).toString()
+            view.text.isNotEmpty() -> view.text.toString()
+            else -> ""
+        }
+        val element = anyModelList.find {
+            when (it) {
+                is AnyModel.ProductType -> it.name == textElement
+                is AnyModel.PackageModel -> it.name == textElement
+                is AnyModel.Zone -> it.name == textElement
+                is AnyModel.AddressModel -> it.name == textElement
+            }
+        }
+        if (element != null) {
+            when (model) {
+                Utils.ObjectModelType.PRODUCT_TYPE -> {
+                    element as AnyModel.ProductType
+                    acceptance.productTypeName = element.name
+                    acceptance.productType = element.ref
+                    view.setText(element.name)
+                }
+                Utils.ObjectModelType.ADDRESS -> {
+                    element as AnyModel.AddressModel
+                    acceptance.storeAddressName = element.name
+                    acceptance.storeUid = element.ref
+                    view.setText(element.name)
+                }
+                Utils.ObjectModelType.ZONE -> {
+                    element as AnyModel.Zone
+                    acceptance.zone = element.name
+                    acceptance.zoneUid = element.ref
+                    view.setText(element.name)
+                }
+                Utils.ObjectModelType._PACKAGE -> {
+                    element as AnyModel.PackageModel
+                    acceptance._package = element.name
+                    acceptance.packageUid = element.ref
+                    view.setText(element.name)
+                }
+                else -> {}
+            }
+        } else {
+            view.text.clear()
+        }
+    }
+
     private fun customSetOnKeyListener(view: View, key: Int, keyEvent: KeyEvent): Boolean {
         if (key == 66 && keyEvent.action == KeyEvent.ACTION_UP) {
             with(binding) {
                 val etxtView = view as TextInputEditText
-                if (etxtView.text!!.isEmpty()) {
-                    etxtView.error = resources.getString(R.string.text_field_is_empyt)
-                    return true
-                }
+//                if (etxtView.text!!.isEmpty()) {
+//                    etxtView.error = resources.getString(R.string.text_field_is_empyt)
+//                    return true
+//                }
                 when (etxtView) {
                     etxtCodeClient -> {
                         showDialogLoading()
@@ -336,10 +360,10 @@ class AcceptanceFragment :
         } else if (key == 66 && keyEvent.action == KeyEvent.ACTION_DOWN) {
             with(binding) {
                 val etxtView = view as TextInputEditText
-                if (etxtView.text!!.isEmpty()) {
-                    etxtView.error = resources.getString(R.string.text_field_is_empyt)
-                    return true
-                }
+//                if (etxtView.text!!.isEmpty()) {
+//                    etxtView.error = resources.getString(R.string.text_field_is_empyt)
+//                    return true
+//                }
                 when (etxtView) {
                     etxtCountInPackage -> {
                         hasFocusCanSave = true
@@ -441,7 +465,7 @@ class AcceptanceFragment :
         if (hasFocus) {
             view as TextInputEditText
             view.text?.let {
-                view.setSelection(it.length)
+                view.selectAll()
             }
         }
     }
@@ -450,7 +474,7 @@ class AcceptanceFragment :
         if (hasFocus) {
             view as AutoCompleteTextView
             view.text?.let {
-                view.setSelection(it.length)
+                view.selectAll()
             }
         }
     }

@@ -1,6 +1,6 @@
 package com.example.soft1c.model
 
 enum class ItemClicked {
-    NUMBER,
+    SIZE_ITEM,
     ITEM;
 }
