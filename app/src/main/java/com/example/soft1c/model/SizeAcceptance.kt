@@ -2,9 +2,9 @@ package com.example.soft1c.model
 
 data class SizeAcceptance(
     var recordAllowed: Boolean = false,
-    val sum: Int = 0,
-    val allWeight: Int = 0,
-    val priceM3: Int = 0,
+    val sum: Double = 0.0,
+    val allWeight: Double = 0.0,
+    val priceM3: Double = 0.0,
     val priceWeight: Double = 0.0,
     var dataArray: List<SizeData>,
 ) {

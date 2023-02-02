@@ -81,9 +81,9 @@ class AcceptanceSizeRepository {
     private fun getSizeDataFromJson(responseBody: String): SizeAcceptance {
         val jsonObject = JSONObject(responseBody)
         val recordAllowed = jsonObject.getBoolean(RECORD_ALLOWED_KEY)
-        val sum = jsonObject.getInt(SUM_KEY)
-        val allWeight = jsonObject.getInt(ALL_WEIGHT_KEY)
-        val priceM = jsonObject.getInt(PRICE_M_KEY)
+        val sum = jsonObject.getDouble(SUM_KEY)
+        val allWeight = jsonObject.getDouble(ALL_WEIGHT_KEY)
+        val priceM = jsonObject.getDouble(PRICE_M_KEY)
         val priceWeight = jsonObject.getDouble(PRICE_WEIGHT_KEY)
         val dataArray = getSizeDataArray(jsonObject.getJSONArray(ARRAY_DATA_KEY))
         return SizeAcceptance(recordAllowed = recordAllowed,

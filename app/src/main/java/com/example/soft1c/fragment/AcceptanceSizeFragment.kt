@@ -68,8 +68,8 @@ class AcceptanceSizeFragment :
         acceptanceSize = sizeAcceptance
         showPbLoading(false)
         with(binding) {
-            txtSum.text = acceptanceSize.sum.toString()
             txtWeight.text = acceptanceSize.allWeight.toString()
+            txtSum.text = acceptanceSize.sum.toString()
             txtPriceM3.text = acceptanceSize.priceM3.toString()
             txtPriceWeight.text = acceptanceSize.priceWeight.toString()
             sizeAdapter.submitList(sizeAcceptance.dataArray)
@@ -80,11 +80,6 @@ class AcceptanceSizeFragment :
 
     private fun fillIndexSeatNumber() {
         indexSeatNumber = 0
-        acceptanceSize.dataArray.forEach {
-            if (it.weight != 0.0) {
-                indexSeatNumber = it.seatNumber + 1
-            }
-        }
         if (indexSeatNumber == 0) {
             indexSeatNumber =
                 if (acceptanceSize.dataArray.isEmpty()) 1 else acceptanceSize.dataArray[0].seatNumber
@@ -211,7 +206,7 @@ class AcceptanceSizeFragment :
             etxtHeight.text.clear()
             etxtWidth.text.clear()
             etxtLength.text.clear()
-            fillIndexSeatNumber()
+            binding.etxtCurrentIndex.setText(indexSeatNumber.toString())
         }
         sizeAdapter.submitList(listData)
         sizeAdapter.notifyDataSetChanged()
