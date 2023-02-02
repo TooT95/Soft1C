@@ -129,6 +129,11 @@ class AcceptanceRepository {
                         response: Response<ResponseBody>,
                     ) {
                         if (response.isSuccessful) {
+                            val jsonString = response.body()?.string() ?: ""
+                            if (jsonString.isEmpty())
+                                continuation.resume(Pair(acceptance, ""))
+                            val ref = JSONArray(jsonString).getJSONObject(0).getString(REF_KEY)
+                            acceptance.ref = ref
                             continuation.resume(Pair(acceptance, ""))
                         } else {
                             val errorBody = response.errorBody()?.string()

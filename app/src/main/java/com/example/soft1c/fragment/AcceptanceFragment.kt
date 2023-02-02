@@ -9,6 +9,7 @@ import android.widget.CheckBox
 import androidx.core.view.isVisible
 import androidx.fragment.app.viewModels
 import com.example.soft1c.R
+import com.example.soft1c.adapter.AcceptanceAdapter
 import com.example.soft1c.utils.Utils
 import com.example.soft1c.databinding.FragmentAcceptanceBinding
 import com.example.soft1c.model.Acceptance
@@ -26,6 +27,7 @@ class AcceptanceFragment :
     private lateinit var acceptance: Acceptance
     private val viewModel: AcceptanceViewModel by viewModels()
     private var hasFocusCanSave = false
+    private var documentCreate = false
     private lateinit var propertyList: List<AcceptanceEnableVisible>
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -47,7 +49,10 @@ class AcceptanceFragment :
 
     private fun observeViewModels() {
         viewModel.acceptanceLiveData.observe(viewLifecycleOwner, ::showDetails)
-        viewModel.toastLiveData.observe(viewLifecycleOwner, ::toast)
+        viewModel.toastLiveData.observe(viewLifecycleOwner) {
+            documentCreate = false
+            toast(it)
+        }
         viewModel.clientLiveData.observe(viewLifecycleOwner, ::clientObserve)
         viewModel.createUpdateLiveData.observe(viewLifecycleOwner, ::createUpdateAcceptance)
     }
@@ -180,6 +185,8 @@ class AcceptanceFragment :
     }
 
     private fun createUpdateAcceptance() {
+        if (documentCreate) return
+        documentCreate = !documentCreate
         with(binding) {
             acceptance.client = etxtCodeClient.text.toString()
             acceptance.autoNumber = etxtAutoNumber.text.toString()
@@ -299,11 +306,27 @@ class AcceptanceFragment :
         model: Int,
         view: AutoCompleteTextView,
     ) {
-        val textElement = when {
-            (view.adapter.count != 0) -> view.adapter.getItem(0).toString()
+        var textElement = when {
             view.text.isNotEmpty() -> view.text.toString()
+            view.text.isEmpty() -> return
             else -> ""
         }
+        textElementFound(anyModelList, model, view, textElement)
+        if (view.text.isEmpty()) {
+            textElement = when {
+                view.adapter.count != 0 -> view.adapter.getItem(0).toString()
+                else -> ""
+            }
+            textElementFound(anyModelList, model, view, textElement)
+        }
+    }
+
+    private fun textElementFound(
+        anyModelList: List<AnyModel>,
+        model: Int,
+        view: AutoCompleteTextView,
+        textElement: String,
+    ) {
         val element = anyModelList.find {
             when (it) {
                 is AnyModel.ProductType -> it.name == textElement

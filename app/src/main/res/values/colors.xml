@@ -10,4 +10,5 @@
     <color name="primaryColor">#FF9800</color>
     <color name="secondaryTextColor">#FFFFFFFF</color>
     <color name="commandTint">#D6D6D6</color>
+    <color name="selectedItem">#80EED973</color>
 </resources>

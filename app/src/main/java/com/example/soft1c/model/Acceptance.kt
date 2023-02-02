@@ -2,7 +2,7 @@ package com.example.soft1c.model
 
 data class Acceptance(
     val number: String, // Номер
-    val ref: String = "", // Ссылка
+    var ref: String = "", // Ссылка
     var client: String = "", // Клиент
     val date: String = "", // Дата
     var weight: Boolean = false, //
