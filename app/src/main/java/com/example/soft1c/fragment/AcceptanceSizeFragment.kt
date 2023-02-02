@@ -80,7 +80,7 @@ class AcceptanceSizeFragment :
     private fun fillIndexSeatNumber() {
         indexSeatNumber = 0
         acceptanceSize.dataArray.forEach {
-            if (it.weight != 0) {
+            if (it.weight != 0.0) {
                 indexSeatNumber += 1
             }
         }
@@ -183,7 +183,7 @@ class AcceptanceSizeFragment :
                             listElement.length = length
                             listElement.width = width
                             listElement.height = height
-                            listElement.weight = (length * width * height * 0.000001).toInt()
+                            listElement.weight = length * width * height * 0.000001
                             indexSeatNumber = 1
                         }
                     }
@@ -197,7 +197,7 @@ class AcceptanceSizeFragment :
                         listElement.length = length
                         listElement.width = width
                         listElement.height = height
-                        listElement.weight = (length * width * height * 0.000001).toInt()
+                        listElement.weight = length * width * height * 0.000001
                         indexSeatNumber += 1
                     }
 
