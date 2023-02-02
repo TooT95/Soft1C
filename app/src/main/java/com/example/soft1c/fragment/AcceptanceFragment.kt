@@ -87,10 +87,10 @@ class AcceptanceFragment :
         }
         showAcceptance()
         with(binding) {
-            includeToolbar.toolbar.title = resources.getString(R.string.text_title_acceptance)
-            includeToolbar.toolbar.setNavigationOnClickListener {
-                closeActivity()
-            }
+//            includeToolbar.toolbar.title = resources.getString(R.string.text_title_acceptance)
+//            includeToolbar.toolbar.setNavigationOnClickListener {
+//                closeActivity()
+//            }
 
             btnClose.setOnClickListener {
                 closeActivity()

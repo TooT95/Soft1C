@@ -6,9 +6,9 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <include
-        android:id="@+id/include_toolbar"
-        layout="@layout/toolbar_main" />
+<!--    <include-->
+<!--        android:id="@+id/include_toolbar"-->
+<!--        layout="@layout/toolbar_main" />-->
 
     <ProgressBar
         android:id="@+id/pb_load"

@@ -39,8 +39,8 @@ class AcceptanceListFragment :
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.includeToolbar.toolbar.title =
-            resources.getString(R.string.text_title_acceptance_list)
+//        binding.includeToolbar.toolbar.title =
+//            resources.getString(R.string.text_title_acceptance_list)
         initUI()
         observeViewModels()
         if (requiredTypes > 0)
