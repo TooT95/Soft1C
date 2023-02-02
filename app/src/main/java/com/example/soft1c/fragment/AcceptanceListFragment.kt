@@ -58,6 +58,8 @@ class AcceptanceListFragment :
     private fun showAcceptanceList(list: List<Acceptance>) {
         showPbLoading(false)
         acceptanceAdapter.submitList(list)
+        showColumnZone()
+        showText()
     }
 
     private fun acceptanceByNumber(pair: Pair<Acceptance, List<AcceptanceEnableVisible>>) {
@@ -103,20 +105,27 @@ class AcceptanceListFragment :
 
             chbVisibiliy.setOnClickListener {
                 showColumnZone = !showColumnZone
-                txtZone.isVisible = showColumnZone
                 initRvList()
                 viewModel.getAcceptanceList()
+                showColumnZone()
             }
             chbShowText.setOnClickListener {
                 showText = !showText
-                linearText.isVisible = showText
+                showText()
             }
             ivRefresh.setOnClickListener {
-                showPbLoading(true)
-                viewModel.getAcceptanceList()
+
             }
         }
 
+    }
+
+    private fun showColumnZone() {
+        binding.txtZone.isVisible = showColumnZone
+    }
+
+    private fun showText() {
+        binding.linearText.isVisible = showText
     }
 
     private fun initRvList() {

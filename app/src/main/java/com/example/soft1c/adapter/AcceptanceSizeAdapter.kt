@@ -43,7 +43,7 @@ class AcceptanceSizeAdapter(private val onItemClicked: (acceptanceSize: SizeAcce
                 txtLength.text = acceptance.length.toString()
                 txtWidth.text = acceptance.width.toString()
                 txtHeight.text = acceptance.height.toString()
-                txtWeight.text = acceptance.weight.toString()
+                txtWeight.text = String.format("%.6f", acceptance.weight)
             }
         }
     }

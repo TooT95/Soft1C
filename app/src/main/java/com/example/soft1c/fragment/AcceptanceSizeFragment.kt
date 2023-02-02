@@ -15,6 +15,7 @@ import com.example.soft1c.databinding.FragmentAcceptanceSizeBinding
 import com.example.soft1c.model.*
 import com.example.soft1c.viewmodel.AcceptanceViewModel
 import timber.log.Timber
+import kotlin.math.round
 
 class AcceptanceSizeFragment :
     BaseFragment<FragmentAcceptanceSizeBinding>(FragmentAcceptanceSizeBinding::inflate) {
@@ -81,10 +82,13 @@ class AcceptanceSizeFragment :
         indexSeatNumber = 0
         acceptanceSize.dataArray.forEach {
             if (it.weight != 0.0) {
-                indexSeatNumber += 1
+                indexSeatNumber = it.seatNumber + 1
             }
         }
-        if (indexSeatNumber == 0) indexSeatNumber = 1
+        if (indexSeatNumber == 0) {
+            indexSeatNumber =
+                if (acceptanceSize.dataArray.isEmpty()) 1 else acceptanceSize.dataArray[0].seatNumber
+        }
         binding.etxtCurrentIndex.setText(indexSeatNumber.toString())
     }
 
@@ -184,16 +188,16 @@ class AcceptanceSizeFragment :
                             listElement.width = width
                             listElement.height = height
                             listElement.weight = length * width * height * 0.000001
-                            indexSeatNumber = 1
                         }
                     }
+                    indexSeatNumber += 1
                 }
                 else -> {
                     for (index in 0 until seatNumberText.toInt()) {
-                        if (listData.size < indexSeatNumber) {
-                            continue
-                        }
-                        val listElement = listData[indexSeatNumber - 1]
+                        val indexList = listData.indexOf(listData.find {
+                            it.seatNumber == indexSeatNumber
+                        } ?: continue)
+                        val listElement = listData[indexList]
                         listElement.length = length
                         listElement.width = width
                         listElement.height = height
