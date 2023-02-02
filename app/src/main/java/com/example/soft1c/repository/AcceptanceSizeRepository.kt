@@ -85,11 +85,7 @@ class AcceptanceSizeRepository {
         val allWeight = jsonObject.getInt(ALL_WEIGHT_KEY)
         val priceM = jsonObject.getInt(PRICE_M_KEY)
         val priceWeight = jsonObject.getInt(PRICE_WEIGHT_KEY)
-        val dataArray = if (recordAllowed) {
-            getSizeDataArray(jsonObject.getJSONArray(ARRAY_DATA_KEY))
-        } else {
-            emptyList()
-        }
+        val dataArray = getSizeDataArray(jsonObject.getJSONArray(ARRAY_DATA_KEY))
         return SizeAcceptance(recordAllowed = recordAllowed,
             sum = sum,
             allWeight = allWeight,

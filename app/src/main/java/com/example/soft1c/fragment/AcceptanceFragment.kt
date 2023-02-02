@@ -335,36 +335,56 @@ class AcceptanceFragment :
                 is AnyModel.AddressModel -> it.name == textElement
             }
         }
-        if (element != null) {
-            when (model) {
-                Utils.ObjectModelType.PRODUCT_TYPE -> {
+        when (model) {
+            Utils.ObjectModelType.PRODUCT_TYPE -> {
+                if (element != null) {
                     element as AnyModel.ProductType
                     acceptance.productTypeName = element.name
                     acceptance.productType = element.ref
                     view.setText(element.name)
+                } else {
+                    acceptance.productTypeName = ""
+                    acceptance.productType = ""
+                    view.text.clear()
                 }
-                Utils.ObjectModelType.ADDRESS -> {
+            }
+            Utils.ObjectModelType.ADDRESS -> {
+                if (element != null) {
                     element as AnyModel.AddressModel
                     acceptance.storeAddressName = element.name
                     acceptance.storeUid = element.ref
                     view.setText(element.name)
+                } else {
+                    acceptance.storeAddressName = ""
+                    acceptance.storeUid = ""
+                    view.text.clear()
                 }
-                Utils.ObjectModelType.ZONE -> {
+            }
+            Utils.ObjectModelType.ZONE -> {
+                if (element != null) {
                     element as AnyModel.Zone
                     acceptance.zone = element.name
                     acceptance.zoneUid = element.ref
                     view.setText(element.name)
+                } else {
+                    acceptance.zone = ""
+                    acceptance.zoneUid = ""
+                    view.text.clear()
                 }
-                Utils.ObjectModelType._PACKAGE -> {
+            }
+            Utils.ObjectModelType._PACKAGE -> {
+                if (element != null) {
                     element as AnyModel.PackageModel
                     acceptance._package = element.name
                     acceptance.packageUid = element.ref
                     view.setText(element.name)
+                } else {
+                    acceptance._package = ""
+                    acceptance.packageUid = ""
+                    view.text.clear()
                 }
-                else -> {}
             }
-        } else {
-            view.text.clear()
+            else -> {}
         }
     }
 
@@ -485,7 +505,7 @@ class AcceptanceFragment :
         showAcceptance()
         setInitFocuses()
         showPbLoading(false)
-        //enableVisibleList()
+        enableVisibleList()
     }
 
     private fun enableVisibleList() {
