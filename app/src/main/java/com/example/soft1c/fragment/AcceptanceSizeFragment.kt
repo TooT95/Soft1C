@@ -49,9 +49,10 @@ class AcceptanceSizeFragment :
         viewModel.acceptanceLiveData.observe(viewLifecycleOwner, ::showAcceptanceDetail)
         viewModel.updateAcceptanceSizeLiveData.observe(viewLifecycleOwner) {
             if (it) {
-                closeDialogLoading()
-                closeActivity()
+                toast(resources.getString(R.string.text_successfully_saved))
             }
+            closeDialogLoading()
+            closeActivity()
         }
     }
 
@@ -117,10 +118,10 @@ class AcceptanceSizeFragment :
         sizeAdapter = AcceptanceSizeAdapter(::sizeItemClicked)
         showPbLoading(true)
         with(binding) {
-            includeToolbar.toolbar.title = resources.getString(R.string.text_title_acceptance)
-            includeToolbar.toolbar.setNavigationOnClickListener {
-                closeActivity()
-            }
+//            includeToolbar.toolbar.title = resources.getString(R.string.text_title_acceptance)
+//            includeToolbar.toolbar.setNavigationOnClickListener {
+//                closeActivity()
+//            }
             rvMain.adapter = sizeAdapter
             rvMain.setHasFixedSize(true)
             rvMain.layoutManager = LinearLayoutManager(requireContext())

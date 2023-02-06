@@ -52,6 +52,7 @@
     <string name="text_price_title">Price for m3:</string>
     <string name="text_zero">0</string>
     <string name="text_capacity">Capacity</string>
+    <string name="text_successfully_saved">Successfully saved</string>
 
     <array name="protocols">
         <item>http</item>

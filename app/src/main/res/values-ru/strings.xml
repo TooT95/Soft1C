@@ -52,4 +52,5 @@
     <string name="app_lang">ru</string>
     <string name="text_zero">0</string>
     <string name="text_capacity">Замер</string>
+    <string name="text_successfully_saved">Успешно сохранено</string>
 </resources>

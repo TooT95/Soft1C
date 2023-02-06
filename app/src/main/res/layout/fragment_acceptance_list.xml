@@ -163,7 +163,7 @@
                 style="@style/TextNumber"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/default_margin"
+                android:layout_marginStart="@dimen/default_margin_item"
                 android:layout_weight="3"
                 android:gravity="center|start"
                 android:text="@string/text_code_client" />
@@ -183,7 +183,7 @@
                 style="@style/TextNumber"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/default_margin"
+                android:layout_marginStart="@dimen/default_margin_item"
                 android:layout_weight="1"
                 android:gravity="center|start"
                 android:text="@string/text_zone" />
@@ -191,7 +191,7 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginStart="@dimen/default_margin"
+                android:layout_marginStart="@dimen/default_margin_item"
                 android:layout_weight="1"
                 android:gravity="center_vertical"
                 android:orientation="vertical">

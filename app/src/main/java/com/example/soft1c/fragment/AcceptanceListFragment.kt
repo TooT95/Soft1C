@@ -56,6 +56,9 @@ class AcceptanceListFragment :
     }
 
     private fun showAcceptanceList(list: List<Acceptance>) {
+        if (AcceptanceAdapter.ACCEPTANCE_GUID.isEmpty() && list.isNotEmpty()) {
+            AcceptanceAdapter.ACCEPTANCE_GUID = list[0].ref
+        }
         showPbLoading(false)
         acceptanceAdapter.submitList(list)
         showColumnZone()
@@ -114,7 +117,8 @@ class AcceptanceListFragment :
                 showText()
             }
             ivRefresh.setOnClickListener {
-
+                showPbLoading(true)
+                viewModel.getAcceptanceList()
             }
         }
 

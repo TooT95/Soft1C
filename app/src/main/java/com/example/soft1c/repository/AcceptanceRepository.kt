@@ -1,5 +1,6 @@
 package com.example.soft1c.repository
 
+import com.example.soft1c.adapter.AcceptanceAdapter
 import com.example.soft1c.utils.Utils
 import com.example.soft1c.model.Acceptance
 import com.example.soft1c.model.AcceptanceEnableVisible
@@ -134,6 +135,7 @@ class AcceptanceRepository {
                                 continuation.resume(Pair(acceptance, ""))
                             val ref = JSONArray(jsonString).getJSONObject(0).getString(REF_KEY)
                             acceptance.ref = ref
+                            AcceptanceAdapter.ACCEPTANCE_GUID = ref
                             continuation.resume(Pair(acceptance, ""))
                         } else {
                             val errorBody = response.errorBody()?.string()

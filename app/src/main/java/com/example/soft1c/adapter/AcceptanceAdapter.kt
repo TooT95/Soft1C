@@ -31,6 +31,8 @@ class AcceptanceAdapter(
                 onItemClicked(ItemClicked.ITEM, acceptance)
             }
             with(binding) {
+                if (ACCEPTANCE_GUID == acceptance.ref)
+                    binding.linearContainer.setBackgroundResource(R.color.selectedItem)
                 txtDocumentNumber.text = acceptance.number
                 txtClient.text = acceptance.client
                 txtPackage.text = acceptance._package
@@ -67,4 +69,8 @@ class AcceptanceAdapter(
     }
 
     override fun getItemCount(): Int = currentList.size
+
+    companion object {
+        var ACCEPTANCE_GUID = ""
+    }
 }
