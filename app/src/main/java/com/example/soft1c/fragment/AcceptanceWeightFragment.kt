@@ -54,9 +54,9 @@ class AcceptanceWeightFragment :
 
     private fun initUI() {
         showPbLoading(true)
-        setInitFocuses()
         showAcceptance()
         with(binding) {
+            setInitFocuses()
 //            includeToolbar.toolbar.title = resources.getString(R.string.text_title_acceptance)
 //            includeToolbar.toolbar.setNavigationOnClickListener {
 //                closeActivity()
@@ -191,6 +191,7 @@ class AcceptanceWeightFragment :
                 requestFocus()
                 val length = text?.length ?: 0
                 if (length > 0) setSelection(length)
+                etxtWeight.selectAll()
             }
         }
     }

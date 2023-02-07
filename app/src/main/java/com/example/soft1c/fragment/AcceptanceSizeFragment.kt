@@ -143,7 +143,11 @@ class AcceptanceSizeFragment :
             }
             etxtWidth.setOnFocusChangeListener { _, hasFocus ->
                 if (hasFocus) {
-                    if (etxtLength.text.isEmpty()) etxtLength.requestFocus()
+                    if (acceptanceSize.dataArray.last().seatNumber < indexSeatNumber) {
+                        ivSave.requestFocus()
+                    } else if (etxtLength.text.isEmpty()) {
+                        etxtLength.requestFocus()
+                    }
                 }
             }
         }
@@ -200,7 +204,6 @@ class AcceptanceSizeFragment :
                         listElement.weight = length * width * height * 0.000001
                         indexSeatNumber += 1
                     }
-
                 }
             }
             etxtChangeColumnsNumber.text.clear()
